@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Wrench, Check, CheckSquare, Square, Loader2 } from 'lucide-react';
+import { Wrench, Check, Loader2 } from 'lucide-react';
 import { useLocalStorage } from 'usehooks-ts';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -131,29 +131,6 @@ export function ToolkitSelector() {
                 </div>
               ) : (
                 <>
-                  <CommandItem
-                    onSelect={() => {
-                      if (selectedToolkits.length === toolkitIds?.length) {
-                        setSelectedToolkits(DEFAULT_TOOLKITS);
-                      } else {
-                        setSelectedToolkits(toolkitIds || DEFAULT_TOOLKITS);
-                      }
-                    }}
-                    className="text-sm font-medium text-muted-foreground hover:text-foreground"
-                  >
-                    <div className="flex items-center gap-2">
-                      {selectedToolkits.length === toolkitIds?.length ? (
-                        <CheckSquare className="size-4" />
-                      ) : (
-                        <Square className="size-4" />
-                      )}
-                      <span>
-                        {selectedToolkits.length === toolkitIds?.length
-                          ? 'Select None'
-                          : 'Select All'}
-                      </span>
-                    </div>
-                  </CommandItem>
                   <div className="h-px bg-border my-1" />
                   {toolkits.map((toolkit) => (
                     <CommandItem
