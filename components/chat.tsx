@@ -17,6 +17,7 @@ import type { Session } from 'next-auth';
 import { unstable_serialize } from 'swr/infinite';
 import { getChatHistoryPaginationKey } from './sidebar-history';
 import { useLocalStorage } from 'usehooks-ts';
+import { DEFAULT_TOOLKITS } from './toolkit-selector';
 
 export function Chat({
   id,
@@ -34,7 +35,10 @@ export function Chat({
   user: Session['user'] | undefined;
 }) {
   const { mutate } = useSWRConfig();
-  const [selectedToolkits] = useLocalStorage<string[]>('selected-toolkits', []);
+  const [selectedToolkits] = useLocalStorage<string[]>(
+    'selected-toolkits-v2',
+    DEFAULT_TOOLKITS,
+  );
 
   const {
     messages,

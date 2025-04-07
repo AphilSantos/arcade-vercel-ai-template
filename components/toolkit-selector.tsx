@@ -22,7 +22,7 @@ import { MAX_TOOLKITS } from '@/lib/arcade/utils';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const DEFAULT_TOOLKITS = [
+export const DEFAULT_TOOLKITS = [
   'Github',
   'Google',
   'Linkedin',
