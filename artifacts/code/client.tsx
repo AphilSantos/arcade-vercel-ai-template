@@ -2,7 +2,6 @@ import { Artifact } from '@/components/create-artifact';
 import { CodeEditor } from '@/components/code-editor';
 import {
   CopyIcon,
-  LogsIcon,
   MessageIcon,
   PlayIcon,
   RedoIcon,
@@ -253,16 +252,6 @@ export const codeArtifact = new Artifact<'code', Metadata>({
         appendMessage({
           role: 'user',
           content: 'Add comments to the code snippet for understanding',
-        });
-      },
-    },
-    {
-      icon: <LogsIcon />,
-      description: 'Add logs',
-      onClick: ({ appendMessage }) => {
-        appendMessage({
-          role: 'user',
-          content: 'Add logs to the code snippet for debugging',
         });
       },
     },
