@@ -48,14 +48,7 @@ export function ToolkitSelector() {
       const validToolkits = selectedToolkits.filter((id) =>
         toolkitIds.includes(id),
       );
-      console.log(
-        'validToolkits',
-        validToolkits,
-        'selectedToolkits',
-        selectedToolkits,
-        'toolkitIds',
-        toolkitIds,
-      );
+
       if (validToolkits.length !== selectedToolkits.length) {
         setSelectedToolkits(validToolkits);
       }
