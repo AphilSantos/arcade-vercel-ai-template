@@ -1,11 +1,4 @@
-export const ARCADE_AUTHORIZATION = {
-  REQUIRED: 'ARCADE_AUTHORIZATION_REQUIRED',
-  TOOL_NAME: 'arcade-authorization',
-  PENDING: 'ARCADE_AUTHORIZATION_PENDING',
-  AUTHORIZED: 'ARCADE_AUTHORIZED',
-  FAILED: 'ARCADE_AUTHORIZATION_FAILED',
-  CANCELLED: 'ARCADE_AUTHORIZATION_CANCELLED',
-} as const;
+export const MAX_TOOLKITS = 6;
 
 export const formatOpenAIToolNameToArcadeToolName = (toolName: string) => {
   return toolName.replaceAll('_', '.');

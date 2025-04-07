@@ -27,6 +27,7 @@ import { readDocument } from '@/lib/ai/tools/read-document';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { arcadeServer } from '@/lib/arcade/server';
+import { MAX_TOOLKITS } from '@/lib/arcade/utils';
 
 export const maxDuration = 60;
 
@@ -54,6 +55,13 @@ export async function POST(request: Request) {
 
     if (!userMessage) {
       return new Response('No user message found', { status: 400 });
+    }
+
+    if (selectedToolkits.length > MAX_TOOLKITS) {
+      return new Response(
+        `You can only select up to ${MAX_TOOLKITS} toolkits at a time`,
+        { status: 400 },
+      );
     }
 
     const chat = await getChatById({ id });

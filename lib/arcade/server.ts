@@ -159,7 +159,7 @@ class ArcadeServer {
     toolkits,
   }: { userId: string; toolkits: string[] }): Promise<ToolSet> {
     if (!toolkits || toolkits.length === 0) {
-      return this.getTools({ userId });
+      return {} as ToolSet;
     }
 
     const tools: ToolSet = {};

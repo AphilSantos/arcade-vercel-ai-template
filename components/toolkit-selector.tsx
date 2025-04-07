@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Wrench, Check, CheckSquare, Square } from 'lucide-react';
+import { Wrench, Check, CheckSquare, Square, Loader2 } from 'lucide-react';
 import { useLocalStorage } from 'usehooks-ts';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -17,13 +17,23 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { getAuthProviderByToolkitId } from '@/lib/arcade/auth-providers';
 import useSWR from 'swr';
 import { Badge } from './ui/badge';
+import { toast } from 'sonner';
+import { MAX_TOOLKITS } from '@/lib/arcade/utils';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+const DEFAULT_TOOLKITS = [
+  'Github',
+  'Google',
+  'Linkedin',
+  'NotionToolkit',
+  'Slack',
+];
+
 export function ToolkitSelector() {
   const [selectedToolkits, setSelectedToolkits] = useLocalStorage<string[]>(
-    'selected-toolkits',
-    [],
+    'selected-toolkits-v2',
+    DEFAULT_TOOLKITS,
   );
   const [open, setOpen] = React.useState(false);
 
@@ -37,6 +47,14 @@ export function ToolkitSelector() {
       // Filter out any selected toolkits that are no longer in the list
       const validToolkits = selectedToolkits.filter((id) =>
         toolkitIds.includes(id),
+      );
+      console.log(
+        'validToolkits',
+        validToolkits,
+        'selectedToolkits',
+        selectedToolkits,
+        'toolkitIds',
+        toolkitIds,
       );
       if (validToolkits.length !== selectedToolkits.length) {
         setSelectedToolkits(validToolkits);
@@ -64,11 +82,17 @@ export function ToolkitSelector() {
     }) || [];
 
   const handleToolkitChange = (toolkitId: string) => {
-    setSelectedToolkits((prev) =>
-      prev.includes(toolkitId)
-        ? prev.filter((id) => id !== toolkitId)
-        : [...prev, toolkitId],
-    );
+    if (selectedToolkits.includes(toolkitId)) {
+      setSelectedToolkits((prev) => prev.filter((id) => id !== toolkitId));
+    } else {
+      if (selectedToolkits.length >= MAX_TOOLKITS) {
+        toast.error(
+          `You can only select up to ${MAX_TOOLKITS} toolkits at a time`,
+        );
+        return;
+      }
+      setSelectedToolkits((prev) => [...prev, toolkitId]);
+    }
   };
 
   return (
@@ -82,17 +106,23 @@ export function ToolkitSelector() {
         >
           <Wrench className="size-4 text-muted-foreground" />
           <span className="text-sm font-medium ">Toolkits</span>
-          {selectedToolkits.length > 0 ? (
-            <Badge className="ml-1 size-4 px-1.5 flex items-center justify-center text-xs font-medium bg-primary text-primary-foreground">
-              {selectedToolkits.length}
-            </Badge>
+          {isLoading ? (
+            <Loader2 className="size-4 animate-spin" />
           ) : (
-            <Badge
-              variant="outline"
-              className="ml-1 py-0.5 px-2 flex items-center justify-center text-xs font-medium"
-            >
-              All
-            </Badge>
+            <>
+              {selectedToolkits.length > 0 ? (
+                <Badge className="ml-1 size-4 px-1.5 flex items-center justify-center text-xs font-medium bg-primary text-primary-foreground">
+                  {selectedToolkits.length}
+                </Badge>
+              ) : (
+                <Badge
+                  variant="outline"
+                  className="ml-1 py-0.5 px-2 flex items-center justify-center text-xs font-medium"
+                >
+                  None
+                </Badge>
+              )}
+            </>
           )}
         </Button>
       </PopoverTrigger>
@@ -111,9 +141,9 @@ export function ToolkitSelector() {
                   <CommandItem
                     onSelect={() => {
                       if (selectedToolkits.length === toolkitIds?.length) {
-                        setSelectedToolkits([]);
+                        setSelectedToolkits(DEFAULT_TOOLKITS);
                       } else {
-                        setSelectedToolkits(toolkitIds || []);
+                        setSelectedToolkits(toolkitIds || DEFAULT_TOOLKITS);
                       }
                     }}
                     className="text-sm font-medium text-muted-foreground hover:text-foreground"
@@ -126,7 +156,7 @@ export function ToolkitSelector() {
                       )}
                       <span>
                         {selectedToolkits.length === toolkitIds?.length
-                          ? 'Unselect All'
+                          ? 'Select None'
                           : 'Select All'}
                       </span>
                     </div>
