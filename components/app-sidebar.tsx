@@ -89,8 +89,8 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                           loading: 'Deleting all chats...',
                           success: () => {
                             router.push('/');
-                            router.refresh();
                             setOpenDeleteAllChatsDialog(false);
+                            router.refresh();
                             return 'All chats deleted successfully';
                           },
                           error: 'Failed to delete all chats',

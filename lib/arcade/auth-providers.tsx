@@ -9,6 +9,7 @@ import {
   Zoom,
   Discord,
   Codesandbox,
+  Reddit,
 } from '@/components/icons/index';
 
 import { Ruler, Search } from 'lucide-react';
@@ -50,6 +51,12 @@ export const AuthProviders: AuthProvider[] = [
     toolkit_id: 'linkedin',
     name: 'LinkedIn',
     icon: LinkedIn,
+  },
+  {
+    provider_id: 'arcade-reddit',
+    toolkit_id: 'reddit',
+    name: 'Reddit',
+    icon: Reddit,
   },
   {
     provider_id: 'arcade-notion',

@@ -14,6 +14,8 @@ export const getToolkitIconByToolName = (toolName: string) => {
       return Icons.LinkedIn;
     case 'notion':
       return Icons.Notion;
+    case 'reddit':
+      return Icons.Reddit;
     case 'slack':
       return Icons.Slack;
     case 'x':
