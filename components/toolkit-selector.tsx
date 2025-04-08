@@ -30,9 +30,11 @@ export const DEFAULT_TOOLKITS = [
   'Slack',
 ];
 
+export const LOCAL_STORAGE_KEY = 'selected-toolkits-v2';
+
 export function ToolkitSelector() {
   const [selectedToolkits, setSelectedToolkits] = useLocalStorage<string[]>(
-    'selected-toolkits-v2',
+    LOCAL_STORAGE_KEY,
     DEFAULT_TOOLKITS,
   );
   const [open, setOpen] = React.useState(false);
