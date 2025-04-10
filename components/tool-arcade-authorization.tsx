@@ -195,7 +195,7 @@ export const ToolArcadeAuthorization = ({
           <CardTitle>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="size-3 rounded-full bg-primary animate-pulse" />
+                <div className="size-3 rounded-full bg-orange-500 animate-pulse" />
                 <span className="text-sm font-medium">
                   Authorization in progress
                 </span>
