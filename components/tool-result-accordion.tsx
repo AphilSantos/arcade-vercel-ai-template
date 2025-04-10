@@ -35,6 +35,7 @@ export function ToolResultAccordion({
               className={cn(
                 'bg-muted/50 p-3 rounded-md overflow-x-auto font-mono text-xs',
                 'border border-border/50',
+                'break-words whitespace-pre-wrap',
               )}
             >
               <code className="text-wrap break-words whitespace-pre-wrap">
@@ -88,8 +89,10 @@ export function ToolResultAccordion({
                     key={key}
                     className="border-b border-border/50 last:border-0"
                   >
-                    <td className="py-1 pr-4 font-medium">{key}</td>
-                    <td className="py-1">{JSON.stringify(value)}</td>
+                    <td className="py-1 pr-4 font-medium break-words">{key}</td>
+                    <td className="py-1 break-words">
+                      {JSON.stringify(value)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -97,35 +100,34 @@ export function ToolResultAccordion({
           </div>
         </div>
         {result && (
-          <div>
+          <div className="w-full overflow-x-hidden">
             <h4 className="text-xs font-medium text-muted-foreground mb-1.5">
               Response
             </h4>
-            <div className="bg-muted/50 p-3 rounded-md border border-border/50 w-full overflow-x-auto">
-              <table className="w-full text-xs">
-                <tbody>
+            <div className="bg-muted/50 p-3 rounded-md border border-border/50 overflow-x-auto">
+              <div className="table w-full text-xs min-w-full">
+                <div className="table-row-group">
                   {Object.entries(result).map(([key, value]) => (
-                    <tr
+                    <div
                       key={key}
-                      className="border-b border-border/50 last:border-0"
+                      className="table-row border-b border-border/50 last:border-0"
                     >
-                      <td className="py-1 pr-4 font-medium">{key}</td>
-                      <td
-                        className="py-1 w-full overflow-x-hidden"
-                        width="100%"
-                      >
+                      <div className="table-cell py-1 pr-4 font-medium break-all whitespace-normal w-3/12">
+                        {key}
+                      </div>
+                      <div className="table-cell py-1 break-all whitespace-normal w-9/12">
                         {typeof value === 'object' ? (
-                          <pre className="whitespace-pre-wrap break-words">
+                          <pre className="whitespace-pre-wrap break-all">
                             {JSON.stringify(value, null, 2)}
                           </pre>
                         ) : (
                           JSON.stringify(value)
                         )}
-                      </td>
-                    </tr>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
             </div>
           </div>
         )}

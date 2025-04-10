@@ -6,7 +6,7 @@ export const ARCADE_TOOLS_WITH_HUMAN_IN_THE_LOOP = [
   'Slack_SendDmToUser',
   'Google_SendEmail',
 ];
-export const ToolCallArcadeTool = ({
+export const ToolWithHumanInTheLoop = ({
   toolInvocation,
   addToolResult,
 }: {

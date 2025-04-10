@@ -4,6 +4,7 @@ import type { ToolInvocation } from 'ai';
 import { Weather } from './weather';
 import { DocumentToolResult } from './document';
 import { ToolResultAccordion } from './tool-result-accordion';
+import FlightMessage from './arcade-tool-calls/flights/search-search-one-way-flights';
 
 type ToolResultProps = {
   toolInvocation: Extract<ToolInvocation, { state: 'result' }>;
@@ -39,6 +40,10 @@ export function ToolResult({ toolInvocation, isReadonly }: ToolResultProps) {
         isReadonly={isReadonly}
       />
     );
+  }
+
+  if (toolName === 'Search_SearchOneWayFlights' && result?.output?.value) {
+    return <FlightMessage data={result.output.value} />;
   }
 
   return <ToolResultAccordion toolInvocation={toolInvocation} />;

@@ -18,8 +18,8 @@ import {
 import { useToolExecution } from '@/lib/arcade/hooks/use-tool-execution';
 import {
   ARCADE_TOOLS_WITH_HUMAN_IN_THE_LOOP,
-  ToolCallArcadeTool,
-} from './arcade-tool-calls/tool-call-arcade-tool';
+  ToolWithHumanInTheLoop,
+} from './arcade-tool-calls/tool-with-human-in-the-loop';
 
 type ToolArcadeAuthorizationProps = {
   toolInvocation: ToolInvocation;
@@ -77,7 +77,7 @@ export const ToolArcadeAuthorization = ({
 
   if (needsHumanInTheLoop) {
     return (
-      <ToolCallArcadeTool
+      <ToolWithHumanInTheLoop
         toolInvocation={toolInvocation}
         addToolResult={addToolResult}
       />
