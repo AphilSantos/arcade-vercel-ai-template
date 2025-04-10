@@ -17,7 +17,7 @@ type SortOption =
   | 'stops-asc'
   | 'stops-desc';
 
-export default function OneWayFlightMessage({ data }: { data: FlightData }) {
+export default function RoundtripFlightMessage({ data }: { data: FlightData }) {
   const [expandedFlight, setExpandedFlight] = useState<string | null>(null);
   const [showAllFlights, setShowAllFlights] = useState(false);
   const [stopFilter, setStopFilter] = useState<StopFilter>('all');
@@ -103,6 +103,7 @@ export default function OneWayFlightMessage({ data }: { data: FlightData }) {
   const destination =
     firstFlight.flights[firstFlight.flights.length - 1].arrival_airport;
   const departureDate = formatDate(origin.time);
+  const returnDate = formatDate(destination.time);
 
   return (
     <div className="w-full max-w-2xl mx-auto bg-white dark:bg-zinc-900 rounded-lg overflow-hidden shadow-sm">
@@ -119,7 +120,7 @@ export default function OneWayFlightMessage({ data }: { data: FlightData }) {
               •
             </span>
             <p className="text-sm text-muted-foreground dark:text-zinc-400">
-              One way
+              Roundtrip
             </p>
           </div>
         </div>

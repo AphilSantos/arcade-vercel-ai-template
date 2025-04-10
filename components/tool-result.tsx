@@ -4,7 +4,8 @@ import type { ToolInvocation } from 'ai';
 import { Weather } from './weather';
 import { DocumentToolResult } from './document';
 import { ToolResultAccordion } from './tool-result-accordion';
-import FlightMessage from './arcade-tool-calls/flights/search-search-one-way-flights';
+import OneWayFlightMessage from './arcade-tool-calls/flights/search-search-one-way-flights';
+import RoundtripFlightMessage from './arcade-tool-calls/flights/search-search-roundtrip-flights';
 
 type ToolResultProps = {
   toolInvocation: Extract<ToolInvocation, { state: 'result' }>;
@@ -42,13 +43,12 @@ export function ToolResult({ toolInvocation, isReadonly }: ToolResultProps) {
     );
   }
 
-  if (
-    ['Search_SearchOneWayFlights', 'Search_SearchRoundtripFlights'].includes(
-      toolName,
-    ) &&
-    result?.output?.value
-  ) {
-    return <FlightMessage data={result.output.value} />;
+  if (toolName === 'Search_SearchOneWayFlights' && result?.output?.value) {
+    return <OneWayFlightMessage data={result.output.value} />;
+  }
+
+  if (toolName === 'Search_SearchRoundtripFlights' && result?.output?.value) {
+    return <RoundtripFlightMessage data={result.output.value} />;
   }
 
   return <ToolResultAccordion toolInvocation={toolInvocation} />;
