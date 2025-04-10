@@ -42,7 +42,12 @@ export function ToolResult({ toolInvocation, isReadonly }: ToolResultProps) {
     );
   }
 
-  if (toolName === 'Search_SearchOneWayFlights' && result?.output?.value) {
+  if (
+    ['Search_SearchOneWayFlights', 'Search_SearchRoundtripFlights'].includes(
+      toolName,
+    ) &&
+    result?.output?.value
+  ) {
     return <FlightMessage data={result.output.value} />;
   }
 
