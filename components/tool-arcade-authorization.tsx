@@ -8,13 +8,7 @@ import { useState, useRef, useLayoutEffect } from 'react';
 import { ToolArcadeAuthorizationLoading } from './tool-arcade-authorization-loading';
 import { ToolArcadeError } from './tool-arcade-error';
 import { Button, buttonVariants } from './ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from './ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { useToolExecution } from '@/lib/arcade/hooks/use-tool-execution';
 import {
   ARCADE_TOOLS_WITH_HUMAN_IN_THE_LOOP,
@@ -193,55 +187,41 @@ export const ToolArcadeAuthorization = ({
       <Card key={`auth-card-${toolInvocation.toolCallId}`}>
         <CardHeader>
           <CardTitle>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div className="size-3 rounded-full bg-orange-500 animate-pulse" />
                 <span className="text-sm font-medium">
-                  Authorization in progress
+                  Authorize {authProviderName}
                 </span>
               </div>
+              <span className="text-sm text-muted-foreground">
+                Required to continue
+              </span>
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="justify-center items-center flex flex-col gap-4">
-          <div className="text-center space-y-1.5">
-            <p className="text-sm">
-              Complete the authorization in the opened window
-            </p>
-            <p className="text-xs text-muted-foreground">
-              This will connect your account with {authProviderName}
-            </p>
-          </div>
+        <CardContent>
           <Link
             href={authResponse.url ?? ''}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              buttonVariants({ variant: 'secondary', size: 'sm' }),
-              'w-fit animate-pulse',
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'w-full flex items-center justify-center gap-2',
+              'bg-orange-50/50 hover:bg-orange-100 dark:bg-orange-950/20 dark:hover:bg-orange-950/40',
+              'border-orange-200 dark:border-orange-800',
+              'transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]',
+              'shadow-sm hover:shadow-md',
             )}
           >
-            <Icon className="size-4 mr-2" />
+            <Icon className="size-4" />
             <span>
               {countdown > 0
-                ? `Opening window in ${countdown}s...`
-                : 'Waiting for authorization...'}
+                ? `Opening in ${countdown}s...`
+                : 'Open Authorization Page'}
             </span>
           </Link>
         </CardContent>
-        <CardFooter className="justify-center">
-          <p className="text-sm text-muted-foreground">
-            Window not opening?{' '}
-            <Link
-              href={authResponse.url ?? ''}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Click here to try again
-            </Link>
-          </p>
-        </CardFooter>
       </Card>
     );
   }
