@@ -1,4 +1,3 @@
-
 <div align="center">
 <p align="center">
   <a href="https://arcade.dev/">
@@ -12,8 +11,6 @@
   A chatbot interface for Arcade tools, built with Next.js and the Arcade SDK.
   Based on the <a href="https://github.com/vercel/ai-chatbot">Vercel AI Chatbot</a> template.
 </p>
-
-
 
 <p align="center">
   <a href="#features">Features</a> •
@@ -46,7 +43,7 @@ Before you begin, ensure you have installed:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/arcadeai/arcade-chatbot.git
+git clone https://github.com/ArcadeAI/arcade-chatbot.git
 cd arcade-chatbot
 ```
 
@@ -60,19 +57,11 @@ pnpm install
 
 ### Environment Variables
 
-Copy the [`.env.example`](.env.example) file to create your own `.env`:
+You will need to use the environment variables [defined in `.env.example`](.env.example) to configure your application.
 
 ```bash
 cp .env.example .env
 ```
-
-Configure the following environment variables:
-
-| Variable            | Required | Default   | Description                 |
-| ------------------- | -------- | --------- | --------------------------- |
-| `ARCADE_API_KEY`    | Yes      | -         | Your Arcade API key      |
-| `ARCADE_ENGINE_URL` | No       | Cloud URL | Engine URL (Local or Cloud) |
-| `ARCADE_USER_ID`    | No       | 'dev'     | Your Arcade user ID         |
 
 > ⚠️ **Security Note**: Never commit your `.env` file to version control. It contains sensitive API keys that should remain private.
 
