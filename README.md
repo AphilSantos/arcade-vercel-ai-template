@@ -13,6 +13,12 @@
 </p>
 
 <p align="center">
+  <strong>
+    Try out our hosted version of this project at <a href="https://chat.arcade.dev">chat.arcade.dev</a>
+  </strong>
+</p>
+
+<p align="center">
   <a href="#features">Features</a> •
   <a href="#prerequisites">Prerequisites</a> •
   <a href="#installation">Installation</a> •
