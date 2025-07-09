@@ -38,7 +38,7 @@ export default function Page() {
       setIsSuccessful(true);
       router.refresh();
     }
-  }, [state.status]);
+  }, [state.status, router]);
 
   const handleSubmit = (formData: FormData) => {
     setEmail(formData.get('email') as string);
@@ -59,7 +59,7 @@ export default function Page() {
           </p>
         </div>
         <div className="text-sm text-purple-200">
-          <p>"The only way to do great work is to love what you do."</p>
+          <p>&ldquo;The only way to do great work is to love what you do.&rdquo;</p>
           <p className="font-medium">— Steve Jobs</p>
         </div>
       </div>

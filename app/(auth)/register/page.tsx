@@ -39,7 +39,7 @@ export default function Page() {
       setIsSuccessful(true);
       router.refresh();
     }
-  }, [state]);
+  }, [state, router]);
 
   const handleSubmit = (formData: FormData) => {
     setEmail(formData.get('email') as string);
@@ -60,7 +60,7 @@ export default function Page() {
           </p>
         </div>
         <div className="text-sm text-purple-200">
-          <p>"The future belongs to those who believe in the beauty of their dreams."</p>
+          <p>&ldquo;The future belongs to those who believe in the beauty of their dreams.&rdquo;</p>
           <p className="font-medium">— Eleanor Roosevelt</p>
         </div>
       </div>
