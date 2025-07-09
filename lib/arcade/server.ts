@@ -145,22 +145,33 @@ class ArcadeServer {
 
   public async getToolkits(): Promise<string[]> {
     try {
+      console.log('Fetching tools list from Arcade API...');
       const tools = await this.client.tools.list({
         limit: 1000,
       });
+
+      console.log('Raw tools response:', JSON.stringify(tools, null, 2));
 
       if (!tools?.items) {
         console.error('Unexpected tools format:', tools);
         return [];
       }
 
+      console.log(`Found ${tools.items.length} tools`);
+      
       const toolkitSet = new Set<string>();
       for (const tool of tools.items) {
         if (tool?.toolkit?.name) {
+          console.log(`Found toolkit: ${tool.toolkit.name} (tool: ${tool.name})`);
           toolkitSet.add(tool.toolkit.name);
+        } else {
+          console.log('Tool missing toolkit.name:', JSON.stringify(tool, null, 2));
         }
       }
-      return Array.from(toolkitSet);
+      
+      const result = Array.from(toolkitSet);
+      console.log(`Returning ${result.length} unique toolkits:`, result);
+      return result;
     } catch (error) {
       console.error('Error in getToolkits:', error);
       // Return an empty array instead of throwing to prevent unhandled promise rejections
