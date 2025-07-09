@@ -336,7 +336,7 @@ const EmpathicVoiceModal = () => {
           <div className="flex-1 overflow-hidden">
             <iframe
               src="https://empathic-voice-interface-starter-eight-psi.vercel.app/"
-              className="w-full h-full border-0 rounded-lg"
+              className="size-full border-0 rounded-lg"
               allow="microphone"
               title="Empathic Voice Interface"
             />
@@ -367,7 +367,7 @@ const AISDKComputerModal = () => {
           <div className="flex-1 overflow-hidden">
             <iframe
               src="https://ai-sdk-computer-use-ten-beta.vercel.app/"
-              className="w-full h-full border-0 rounded-lg"
+              className="size-full border-0 rounded-lg"
               title="AI SDK Computer Interface"
             />
           </div>

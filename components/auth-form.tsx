@@ -64,7 +64,7 @@ export function AuthForm({
             id="remember-me"
             name="remember-me"
             type="checkbox"
-            className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+            className="size-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
           />
           <label htmlFor="remember-me" className="block ml-2 text-sm text-gray-700">
             Remember me

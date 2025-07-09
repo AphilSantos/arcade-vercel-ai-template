@@ -43,7 +43,7 @@ const StockBotModal = () => {
           <div className="flex-1 overflow-hidden">
             <iframe
               src="https://stockbot-powered-by-groq-nine-vert.vercel.app/"
-              className="w-full h-full border-0 rounded-lg"
+              className="size-full border-0 rounded-lg"
               allow="clipboard-read; clipboard-write"
               allowFullScreen
               title="StockBot Interface"

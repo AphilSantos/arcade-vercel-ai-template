@@ -9,6 +9,7 @@ export function EmpathicVoiceModal() {
   return (
     <>
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
         className="p-2 rounded-full hover:bg-accent"
         aria-label="Open empathic voice interface"
@@ -23,7 +24,7 @@ export function EmpathicVoiceModal() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="h-5 w-5"
+          className="size-5"
         >
           <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
           <circle cx="12" cy="7" r="4" />
@@ -35,7 +36,7 @@ export function EmpathicVoiceModal() {
           <div className="flex-1 overflow-hidden">
             <iframe
               src="https://empathic-voice-interface-starter-eight-psi.vercel.app/"
-              className="w-full h-full border-0 rounded-lg"
+              className="size-full border-0 rounded-lg"
               allow="microphone"
               title="Empathic Voice Interface"
             />
