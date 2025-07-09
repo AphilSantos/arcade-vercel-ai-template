@@ -34,16 +34,19 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     id,
   });
 
-  function convertToUIMessages(messages: Array<DBMessage>): Array<UIMessage> {
+  function convertToUIMessages(messages: Array<DBMessage> | null | undefined): Array<UIMessage> {
+    if (!messages || !Array.isArray(messages)) {
+      return [];
+    }
+    
     return messages.map((message) => ({
       id: message.id,
-      parts: message.parts as UIMessage['parts'],
+      parts: message.parts as UIMessage['parts'] || [],
       role: message.role as UIMessage['role'],
       // Note: content will soon be deprecated in @ai-sdk/react
       content: '',
       createdAt: message.createdAt,
-      experimental_attachments:
-        (message.attachments as Array<Attachment>) ?? [],
+      experimental_attachments: (message.attachments as Array<Attachment>) ?? [],
     }));
   }
 
