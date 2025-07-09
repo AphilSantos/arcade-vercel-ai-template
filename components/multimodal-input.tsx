@@ -16,11 +16,13 @@ import {
 import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 
-import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
+import { ArrowUpIcon, PaperclipIcon, StopIcon, UserIcon, TerminalWindowIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
+import { StockBotModal } from './StockBotModal';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { SuggestedActions } from './suggested-actions';
+import { Dialog, DialogContent } from './ui/dialog';
 import equal from 'fast-deep-equal';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import { ToolkitSelector } from './toolkit-selector';
@@ -259,7 +261,10 @@ function PureMultimodalInput({
 
         <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start gap-2">
           <AttachmentsButton fileInputRef={fileInputRef} status={status} />
+          <EmpathicVoiceModal />
+          <AISDKComputerModal />
           <ToolkitSelector />
+          <StockBotModal />
         </div>
 
         <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
@@ -310,6 +315,67 @@ function PureAttachmentsButton({
 }
 
 const AttachmentsButton = memo(PureAttachmentsButton);
+
+const EmpathicVoiceModal = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="rounded-md p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
+        onClick={() => setIsOpen(true)}
+      >
+        <UserIcon />
+      </Button>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
+          <div className="flex-1 overflow-hidden">
+            <iframe
+              src="https://empathic-voice-interface-starter-eight-psi.vercel.app/"
+              className="w-full h-full border-0 rounded-lg"
+              allow="microphone"
+              title="Empathic Voice Interface"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
+
+const AISDKComputerModal = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="rounded-md p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
+        onClick={() => setIsOpen(true)}
+      >
+        <TerminalWindowIcon />
+      </Button>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
+          <div className="flex-1 overflow-hidden">
+            <iframe
+              src="https://ai-sdk-computer-use-ten-beta.vercel.app/"
+              className="w-full h-full border-0 rounded-lg"
+              title="AI SDK Computer Interface"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
 
 function PureStopButton({
   stop,

@@ -20,15 +20,15 @@ export function FeatureCard({ icon, title, subtitle, id }: FeatureCardProps) {
       <div
         className="bg-gradient-to-br from-[#2d2d45]/50 to-[#3d2d52]/50 
 			size-8 sm:size-10 rounded-xl flex items-center justify-center shadow-sm border 
-			border-[#2d2d45]"
+			border-[#2d2d45] dark:border-[#2d2d45]"
       >
         {icon}
       </div>
       <div className="space-y-2 pt-2">
-        <h3 className="font-semibold text-left text-gray-200 text-sm">
+        <h3 className="font-semibold text-left text-gray-900 dark:text-gray-200 text-sm">
           {title}
         </h3>
-        <p className="text-xs text-left text-gray-400">{subtitle}</p>
+        <p className="text-xs text-left text-gray-600 dark:text-gray-400">{subtitle}</p>
       </div>
     </Card>
   );

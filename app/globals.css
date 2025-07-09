@@ -30,10 +30,10 @@
         --card-foreground: 240 10% 3.9%;
         --popover: 0 0% 100%;
         --popover-foreground: 240 10% 3.9%;
-        --primary: 342 85% 50%;
+        --primary: 197 71% 43%;
         --primary-foreground: 0 0% 98%;
-        --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
+        --gradient-from: 168 80% 42%;
+        --gradient-to: 212 85% 50%;
         --muted: 240 4.8% 95.9%;
         --muted-foreground: 240 3.8% 46.1%;
         --accent: 240 4.8% 95.9%;
@@ -65,8 +65,10 @@
         --card-foreground: 0 0% 98%;
         --popover: 240 10% 3.9%;
         --popover-foreground: 0 0% 98%;
-        --primary: 342 85% 50%;
-        --primary-foreground: 207 100% 96%;
+        --primary: 197 71% 43%;
+        --primary-foreground: 0 0% 98%;
+        --gradient-from: 168 80% 42%;
+        --gradient-to: 212 85% 50%;
         --secondary: 240 3.7% 15.9%;
         --secondary-foreground: 0 0% 98%;
         --muted: 240 3.7% 15.9%;
@@ -91,6 +93,18 @@
         --sidebar-accent-foreground: 240 4.8% 95.9%;
         --sidebar-border: 240 3.7% 15.9%;
         --sidebar-ring: 217.2 91.2% 59.8%;
+    }
+}
+
+@layer utilities {
+    .bg-gradient-primary {
+        background: linear-gradient(90deg, hsl(var(--gradient-from)) 0%, hsl(var(--gradient-to)) 100%);
+    }
+    .text-gradient-primary {
+        background: linear-gradient(90deg, hsl(var(--gradient-from)) 0%, hsl(var(--gradient-to)) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
     }
 }
 

@@ -7,9 +7,9 @@ import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://chat.arcade.dev'),
-  title: 'Arcade GPT',
-  description: 'Arcade GPT',
+  metadataBase: new URL('https://modelmix.me'),
+  title: 'Agentic ModelMix',
+  description: 'Agentic ModelMix',
 };
 
 export const viewport = {

@@ -51,10 +51,11 @@ function PureChatHeader({
       )}
 
       {!isReadonly && (
-        <ModelSelector
-          selectedModelId={selectedModelId}
-          className="order-1 md:order-2"
-        />
+        <div className="flex items-center gap-2 order-1 md:order-2">
+          <ModelSelector
+            selectedModelId={selectedModelId}
+          />
+        </div>
       )}
 
       {!isReadonly && (

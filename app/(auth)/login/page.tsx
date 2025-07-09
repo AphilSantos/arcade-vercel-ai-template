@@ -46,27 +46,51 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-dvh w-screen items-start pt-12 md:pt-0 md:items-center justify-center bg-background">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl flex flex-col gap-12">
-        <div className="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
-          <h3 className="text-xl font-semibold dark:text-zinc-50">Sign In</h3>
-          <p className="text-sm text-gray-500 dark:text-zinc-400">
-            Use your email and password to sign in
+    <div className="min-h-screen w-full lg:grid lg:grid-cols-2 bg-white">
+      {/* Left side with gradient background */}
+      <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-purple-900 via-purple-700 to-pink-600 p-12 text-white">
+        <div className="text-2xl font-bold">ModelMix</div>
+        <div className="space-y-4">
+          <blockquote className="text-4xl font-serif font-bold leading-tight">
+            Get Everything You Want
+          </blockquote>
+          <p className="text-purple-100 text-lg">
+            The future of AI-powered conversations starts here.
           </p>
         </div>
-        <AuthForm action={handleSubmit} defaultEmail={email}>
-          <SubmitButton isSuccessful={isSuccessful}>Sign in</SubmitButton>
-          <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
-            {"Don't have an account? "}
-            <Link
-              href="/register"
-              className="font-semibold text-gray-800 hover:underline dark:text-zinc-200"
+        <div className="text-sm text-purple-200">
+          <p>"The only way to do great work is to love what you do."</p>
+          <p className="font-medium">— Steve Jobs</p>
+        </div>
+      </div>
+
+      {/* Right side with login form */}
+      <div className="flex items-center justify-center p-8 md:p-12 lg:p-24">
+        <div className="w-full max-w-md">
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">Welcome Back</h2>
+            <p className="text-gray-600">Sign in to your account to continue</p>
+          </div>
+          
+          <AuthForm action={handleSubmit} defaultEmail={email}>
+            <SubmitButton 
+              isSuccessful={isSuccessful} 
+              className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 px-4 rounded-lg font-medium transition-colors"
             >
-              Sign up
-            </Link>
-            {' for free.'}
-          </p>
-        </AuthForm>
+              Sign in
+            </SubmitButton>
+            
+            <p className="text-center text-sm text-gray-600 mt-6">
+              Don't have an account?{' '}
+              <Link 
+                href="/register" 
+                className="font-medium text-purple-700 hover:text-purple-600"
+              >
+                Sign up
+              </Link>
+            </p>
+          </AuthForm>
+        </div>
       </div>
     </div>
   );

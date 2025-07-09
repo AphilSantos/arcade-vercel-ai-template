@@ -47,31 +47,51 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-dvh w-screen items-start pt-12 md:pt-0 md:items-center justify-center bg-background">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl gap-12 flex flex-col">
-        <div className="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
-          <h3 className="text-xl font-semibold dark:text-zinc-50">Sign Up</h3>
-          <p className="text-sm text-gray-500 dark:text-zinc-400">
-            Create an account with your email and password
+    <div className="min-h-screen w-full lg:grid lg:grid-cols-2 bg-white">
+      {/* Left side with gradient background */}
+      <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-purple-900 via-purple-700 to-pink-600 p-12 text-white">
+        <div className="text-2xl font-bold">ModelMix</div>
+        <div className="space-y-4">
+          <blockquote className="text-4xl font-serif font-bold leading-tight">
+            Join Our Community
+          </blockquote>
+          <p className="text-purple-100 text-lg">
+            Start your journey with AI-powered conversations today.
           </p>
         </div>
-        <AuthForm
-          action={handleSubmit}
-          defaultEmail={email}
-          showPreferredName={true}
-        >
-          <SubmitButton isSuccessful={isSuccessful}>Sign Up</SubmitButton>
-          <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
-            {'Already have an account? '}
-            <Link
-              href="/login"
-              className="font-semibold text-gray-800 hover:underline dark:text-zinc-200"
+        <div className="text-sm text-purple-200">
+          <p>"The future belongs to those who believe in the beauty of their dreams."</p>
+          <p className="font-medium">— Eleanor Roosevelt</p>
+        </div>
+      </div>
+
+      {/* Right side with register form */}
+      <div className="flex items-center justify-center p-8 md:p-12 lg:p-24">
+        <div className="w-full max-w-md">
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">Create Account</h2>
+            <p className="text-gray-600">Join us to get started</p>
+          </div>
+          
+          <AuthForm action={handleSubmit} showPreferredName defaultEmail={email}>
+            <SubmitButton 
+              isSuccessful={isSuccessful} 
+              className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 px-4 rounded-lg font-medium transition-colors"
             >
-              Sign in
-            </Link>
-            {' instead.'}
-          </p>
-        </AuthForm>
+              Create account
+            </SubmitButton>
+            
+            <p className="text-center text-sm text-gray-600 mt-6">
+              Already have an account?{' '}
+              <Link 
+                href="/login" 
+                className="font-medium text-purple-700 hover:text-purple-600"
+              >
+                Sign in
+              </Link>
+            </p>
+          </AuthForm>
+        </div>
       </div>
     </div>
   );

@@ -15,11 +15,11 @@ export const Overview = ({ user }: { user: Session['user'] | undefined }) => {
       <div className="rounded-xl p-6 flex flex-col leading-relaxed text-center max-w-xl">
         <p className="flex flex-row justify-center gap-4 items-center mb-36">
           <img
-            src="/images/arcade-logo-white.png"
-            alt="Arcade Logo"
+            src="/images/modelmixlogo.png"
+            alt="Agentic ModelMix Logo"
             width={241}
             height={48}
-            className="w-auto h-6 invert dark:invert-0"
+            className="w-auto h-12"
           />
         </p>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300">
