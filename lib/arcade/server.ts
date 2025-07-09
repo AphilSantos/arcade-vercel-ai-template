@@ -144,14 +144,28 @@ class ArcadeServer {
   }
 
   public async getToolkits(): Promise<string[]> {
-    const tools = await this.client.tools.list({
-      limit: 1000,
-    });
-    const toolkitSet = new Set<string>();
-    for (const tool of tools.items) {
-      toolkitSet.add(tool.toolkit.name);
+    try {
+      const tools = await this.client.tools.list({
+        limit: 1000,
+      });
+
+      if (!tools?.items) {
+        console.error('Unexpected tools format:', tools);
+        return [];
+      }
+
+      const toolkitSet = new Set<string>();
+      for (const tool of tools.items) {
+        if (tool?.toolkit?.name) {
+          toolkitSet.add(tool.toolkit.name);
+        }
+      }
+      return Array.from(toolkitSet);
+    } catch (error) {
+      console.error('Error in getToolkits:', error);
+      // Return an empty array instead of throwing to prevent unhandled promise rejections
+      return [];
     }
-    return Array.from(toolkitSet);
   }
 
   public async getToolsByToolkits({
