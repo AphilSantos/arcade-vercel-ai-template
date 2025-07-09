@@ -16,13 +16,7 @@ import {
 import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 
-import {
-  ArrowUpIcon,
-  PaperclipIcon,
-  StopIcon,
-  UserIcon,
-  TerminalWindowIcon,
-} from './icons';
+import { ArrowUpIcon, PaperclipIcon, StopIcon, UserIcon, TerminalWindowIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
 import { StockBotModal } from './StockBotModal';
 import { Button } from './ui/button';
@@ -369,7 +363,7 @@ const AISDKComputerModal = () => {
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-[98vw] h-[90vh] flex flex-col max-w-none">
+        <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
           <div className="flex-1 overflow-hidden">
             <iframe
               src="https://ai-sdk-computer-use-ten-beta.vercel.app/"
