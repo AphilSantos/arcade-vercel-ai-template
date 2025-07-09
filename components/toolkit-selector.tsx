@@ -23,11 +23,11 @@ import { MAX_TOOLKITS } from '@/lib/arcade/utils';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export const DEFAULT_TOOLKITS = [
-  'Github',
-  'Google',
-  'Linkedin',
-  'NotionToolkit',
-  'Slack',
+  'github',
+  'google',
+  'linkedin',
+  'notiontoolkit',
+  'slack',
 ];
 
 export const LOCAL_STORAGE_KEY = 'selected-toolkits-v2';

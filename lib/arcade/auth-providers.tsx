@@ -119,5 +119,8 @@ export const getAuthProviderByToolkitId = (
     return undefined;
   }
 
-  return AuthProviders.find((provider) => provider.toolkit_id === toolkit_id);
+  const lowerCaseToolkitId = toolkit_id.toLowerCase();
+  return AuthProviders.find(
+    (provider) => provider.toolkit_id.toLowerCase() === lowerCaseToolkitId
+  );
 };
