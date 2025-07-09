@@ -16,13 +16,10 @@ import {
 import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 
-import {
-  ArrowUpIcon,
-  PaperclipIcon,
-  StopIcon,
-  UserIcon,
-  TerminalWindowIcon,
-} from './icons';
+import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
+import { Puzzle, Terminal, User } from 'lucide-react';
+import { OverflowMenu } from './overflow-menu';
+import { cn } from '@/lib/utils';
 import { PreviewAttachment } from './preview-attachment';
 import { StockBotModal } from './StockBotModal';
 import { Button } from './ui/button';
@@ -68,6 +65,8 @@ function PureMultimodalInput({
       adjustHeight();
     }
   }, []);
+
+  const [activeModal, setActiveModal] = useState<string | null>(null);
 
   const adjustHeight = () => {
     if (textareaRef.current) {
@@ -265,13 +264,49 @@ function PureMultimodalInput({
           }}
         />
 
-        <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start gap-2">
-          <AttachmentsButton fileInputRef={fileInputRef} status={status} />
-          <EmpathicVoiceModal />
-          <AISDKComputerModal />
-          <ToolkitSelector />
-          <StockBotModal />
+        <div className="absolute bottom-0 p-2 w-full flex flex-row justify-between items-center">
+          <div className="flex-1 flex flex-row gap-1 overflow-x-auto no-scrollbar items-center">
+            <AttachmentsButton fileInputRef={fileInputRef} status={status} />
+            <ToolkitSelector />
+            <StockBotModal />
+            <OverflowMenu
+              items={[
+                {
+                  id: 'empathic-voice',
+                  label: 'Empathic Voice',
+                  icon: <User className="h-4 w-4" />,
+                  onClick: () => setActiveModal('empathic-voice')
+                },
+                {
+                  id: 'computer',
+                  label: 'Computer',
+                  icon: <Terminal className="h-4 w-4" />,
+                  onClick: () => setActiveModal('computer')
+                },
+                {
+                  id: 'fragments',
+                  label: 'Fragments',
+                  icon: <Puzzle className="h-4 w-4" />,
+                  onClick: () => setActiveModal('fragments')
+                },
+              ]}
+            />
+          </div>
         </div>
+        
+        {/* Modals */}
+        <EmpathicVoiceModal 
+          isOpen={activeModal === 'empathic-voice'} 
+          onOpenChange={(open) => !open && setActiveModal(null)} 
+        />
+        <AISDKComputerModal 
+          isOpen={activeModal === 'computer'} 
+          onOpenChange={(open) => !open && setActiveModal(null)} 
+        />
+        <FragmentsModal 
+          isOpen={activeModal === 'fragments'} 
+          onOpenChange={(open) => !open && setActiveModal(null)} 
+        />
 
         <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
           {status === 'submitted' || status === 'streaming' ? (
@@ -322,66 +357,57 @@ function PureAttachmentsButton({
 
 const AttachmentsButton = memo(PureAttachmentsButton);
 
-const EmpathicVoiceModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ModalProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
+  className?: string;
+}
 
-  return (
-    <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="rounded-md p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
-        onClick={() => setIsOpen(true)}
-      >
-        <UserIcon />
-      </Button>
+const Modal = ({ isOpen, onOpenChange, children, className }: ModalProps) => (
+  <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <DialogContent className={cn("w-[98vw] h-[90vh] flex flex-col max-w-none", className)}>
+      {children}
+    </DialogContent>
+  </Dialog>
+);
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
-          <div className="flex-1 overflow-hidden">
-            <iframe
-              src="https://empathic-voice-interface-starter-eight-psi.vercel.app/"
-              className="size-full border-0 rounded-lg"
-              allow="microphone"
-              title="Empathic Voice Interface"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
+const EmpathicVoiceModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
+  <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <div className="flex-1 overflow-hidden">
+      <iframe
+        src="https://empathic-voice-interface-starter-eight-psi.vercel.app/"
+        className="size-full border-0 rounded-lg"
+        allow="microphone"
+        title="Empathic Voice Interface"
+      />
+    </div>
+  </Modal>
+);
 
-const AISDKComputerModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const AISDKComputerModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
+  <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <div className="flex-1 overflow-hidden">
+      <iframe
+        src="https://ai-sdk-computer-use-ten-beta.vercel.app/"
+        className="size-full border-0 rounded-lg"
+        title="AI SDK Computer Interface"
+      />
+    </div>
+  </Modal>
+);
 
-  return (
-    <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="rounded-md p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
-        onClick={() => setIsOpen(true)}
-      >
-        <TerminalWindowIcon />
-      </Button>
-
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-[98vw] h-[90vh] flex flex-col max-w-none">
-          <div className="flex-1 overflow-hidden">
-            <iframe
-              src="https://ai-sdk-computer-use-ten-beta.vercel.app/"
-              className="size-full border-0 rounded-lg"
-              title="AI SDK Computer Interface"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
+const FragmentsModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
+  <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <div className="flex-1 overflow-hidden">
+      <iframe
+        src="https://fragments-kohl.vercel.app/"
+        className="size-full border-0 rounded-lg"
+        title="Fragments Interface"
+      />
+    </div>
+  </Modal>
+);
 
 function PureStopButton({
   stop,
