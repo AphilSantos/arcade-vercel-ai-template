@@ -52,14 +52,16 @@ export default function Page() {
         <div className="text-2xl font-bold">ModelMix</div>
         <div className="space-y-4">
           <blockquote className="text-4xl font-serif font-bold leading-tight">
-            Get Everything You Want
+            Get More Than Just Chatting
           </blockquote>
           <p className="text-purple-100 text-lg">
             The future of AI-powered conversations starts here.
           </p>
         </div>
         <div className="text-sm text-purple-200">
-          <p>&ldquo;The only way to do great work is to love what you do.&rdquo;</p>
+          <p>
+            &ldquo;The only way to do great work is to love what you do.&rdquo;
+          </p>
           <p className="font-medium">— Steve Jobs</p>
         </div>
       </div>
@@ -68,22 +70,24 @@ export default function Page() {
       <div className="flex items-center justify-center p-8 md:p-12 lg:p-24">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">Welcome Back</h2>
+            <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">
+              Welcome Back
+            </h2>
             <p className="text-gray-600">Sign in to your account to continue</p>
           </div>
-          
+
           <AuthForm action={handleSubmit} defaultEmail={email}>
-            <SubmitButton 
-              isSuccessful={isSuccessful} 
+            <SubmitButton
+              isSuccessful={isSuccessful}
               className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 px-4 rounded-lg font-medium transition-colors"
             >
               Sign in
             </SubmitButton>
-            
+
             <p className="text-center text-sm text-gray-600 mt-6">
               Don&apos;t have an account?{' '}
-              <Link 
-                href="/register" 
+              <Link
+                href="/register"
                 className="font-medium text-purple-700 hover:text-purple-600"
               >
                 Sign up
