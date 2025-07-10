@@ -275,37 +275,37 @@ function PureMultimodalInput({
                   id: 'empathic-voice',
                   label: 'Empathic Voice',
                   icon: <User className="h-4 w-4" />,
-                  onClick: () => setActiveModal('empathic-voice')
+                  onClick: () => setActiveModal('empathic-voice'),
                 },
                 {
                   id: 'computer',
                   label: 'Computer',
                   icon: <Terminal className="h-4 w-4" />,
-                  onClick: () => setActiveModal('computer')
+                  onClick: () => setActiveModal('computer'),
                 },
                 {
                   id: 'fragments',
                   label: 'Fragments',
                   icon: <Puzzle className="h-4 w-4" />,
-                  onClick: () => setActiveModal('fragments')
+                  onClick: () => setActiveModal('fragments'),
                 },
               ]}
             />
           </div>
         </div>
-        
+
         {/* Modals */}
-        <EmpathicVoiceModal 
-          isOpen={activeModal === 'empathic-voice'} 
-          onOpenChange={(open) => !open && setActiveModal(null)} 
+        <EmpathicVoiceModal
+          isOpen={activeModal === 'empathic-voice'}
+          onOpenChange={(open) => !open && setActiveModal(null)}
         />
-        <AISDKComputerModal 
-          isOpen={activeModal === 'computer'} 
-          onOpenChange={(open) => !open && setActiveModal(null)} 
+        <AISDKComputerModal
+          isOpen={activeModal === 'computer'}
+          onOpenChange={(open) => !open && setActiveModal(null)}
         />
-        <FragmentsModal 
-          isOpen={activeModal === 'fragments'} 
-          onOpenChange={(open) => !open && setActiveModal(null)} 
+        <FragmentsModal
+          isOpen={activeModal === 'fragments'}
+          onOpenChange={(open) => !open && setActiveModal(null)}
         />
 
         <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
@@ -366,13 +366,18 @@ interface ModalProps {
 
 const Modal = ({ isOpen, onOpenChange, children, className }: ModalProps) => (
   <Dialog open={isOpen} onOpenChange={onOpenChange}>
-    <DialogContent className={cn("w-[98vw] h-[90vh] flex flex-col max-w-none", className)}>
+    <DialogContent
+      className={cn('w-[98vw] h-[90vh] flex flex-col max-w-none', className)}
+    >
       {children}
     </DialogContent>
   </Dialog>
 );
 
-const EmpathicVoiceModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
+const EmpathicVoiceModal = ({
+  isOpen,
+  onOpenChange,
+}: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
   <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
     <div className="flex-1 overflow-hidden">
       <iframe
@@ -385,7 +390,10 @@ const EmpathicVoiceModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenC
   </Modal>
 );
 
-const AISDKComputerModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
+const AISDKComputerModal = ({
+  isOpen,
+  onOpenChange,
+}: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
   <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
     <div className="flex-1 overflow-hidden">
       <iframe
@@ -397,11 +405,14 @@ const AISDKComputerModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenC
   </Modal>
 );
 
-const FragmentsModal = ({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
+const FragmentsModal = ({
+  isOpen,
+  onOpenChange,
+}: { isOpen: boolean; onOpenChange: (open: boolean) => void }) => (
   <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
     <div className="flex-1 overflow-hidden">
       <iframe
-        src="https://fragments-kohl.vercel.app/"
+        src="https://boltse.pages.dev/"
         className="size-full border-0 rounded-lg"
         title="Fragments Interface"
       />
