@@ -22,6 +22,7 @@ import { OverflowMenu } from './overflow-menu';
 import { cn } from '@/lib/utils';
 import { PreviewAttachment } from './preview-attachment';
 import { StockBotModal } from './StockBotModal';
+import { PaletteModal } from './PaletteModal';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { SuggestedActions } from './suggested-actions';
@@ -67,6 +68,42 @@ function PureMultimodalInput({
   }, []);
 
   const [activeModal, setActiveModal] = useState<string | null>(null);
+
+  const handlePaste = useCallback(async (event: React.ClipboardEvent) => {
+    // Check if there are any image files in the clipboard
+    const items = event.clipboardData?.items;
+    if (!items) return;
+
+    // Find the first image in the clipboard
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') === 0) {
+        const blob = items[i].getAsFile();
+        if (blob) {
+          event.preventDefault();
+          try {
+            // Add the file to the upload queue
+            setUploadQueue(prev => [...prev, blob.name]);
+            
+            // Upload the file
+            const uploadedAttachment = await uploadFile(blob);
+            
+            if (uploadedAttachment) {
+              setAttachments((currentAttachments) => [
+                ...currentAttachments,
+                uploadedAttachment,
+              ]);
+            }
+          } catch (error) {
+            console.error('Error uploading pasted image:', error);
+            toast.error('Failed to upload pasted image');
+          } finally {
+            setUploadQueue(prev => prev.filter(name => name !== blob.name));
+          }
+          break;
+        }
+      }
+    }
+  }, [setAttachments]);
 
   const adjustHeight = () => {
     if (textareaRef.current) {
@@ -125,7 +162,7 @@ function PureMultimodalInput({
     }
   }, [setAttachments, setLocalStorageInput, width, chatId, setInput]);
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = async (file: File | Blob): Promise<Attachment | undefined> => {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -245,6 +282,7 @@ function PureMultimodalInput({
           )}
           rows={2}
           autoFocus
+          onPaste={handlePaste}
           onKeyDown={(event) => {
             if (
               event.key === 'Enter' &&
@@ -269,6 +307,7 @@ function PureMultimodalInput({
             <AttachmentsButton fileInputRef={fileInputRef} status={status} />
             <ToolkitSelector />
             <StockBotModal />
+            <PaletteModal />
             <OverflowMenu
               items={[
                 {
