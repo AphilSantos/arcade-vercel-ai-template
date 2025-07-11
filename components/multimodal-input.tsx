@@ -414,7 +414,7 @@ const FragmentsModal = ({
   <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
     <div className="flex-1 overflow-hidden">
       <iframe
-        src="https://boltse.pages.dev/"
+        src="https://fragments-kohl.vercel.app/"
         className="size-full border-0 rounded-lg"
         title="Fragments Interface"
       />
