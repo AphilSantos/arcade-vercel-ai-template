@@ -1,11 +1,15 @@
 import { config } from 'dotenv';
+
+// Step 4: Load .env.local, then fallback to .env
+config({ path: '.env.local' });
+config(); // fallback to .env if .env.local is missing
+
+// Step 6: Print POSTGRES_URL for debugging
+console.log('POSTGRES_URL:', process.env.POSTGRES_URL);
+
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
-
-config({
-  path: '.env.local',
-});
 
 const runMigrate = async () => {
   if (!process.env.POSTGRES_URL) {
