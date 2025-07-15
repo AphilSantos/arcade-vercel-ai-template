@@ -414,7 +414,7 @@ const FragmentsModal = ({
   <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
     <div className="flex-1 overflow-hidden">
       <iframe
-        src="https://boltse.pages.dev/"
+        src="https://enzostvs-deepsite.hf.space/projects/new"
         className="size-full border-0 rounded-lg"
         title="Fragments Interface"
       />
