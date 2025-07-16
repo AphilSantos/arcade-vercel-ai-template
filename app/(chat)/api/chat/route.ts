@@ -28,6 +28,7 @@ import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { arcadeServer } from '@/lib/arcade/server';
 import { MAX_TOOLKITS } from '@/lib/arcade/utils';
+import { incrementUsage } from '@/middleware/usage-check';
 
 export const maxDuration = 60;
 
@@ -49,6 +50,38 @@ export async function POST(request: Request) {
 
     if (!session || !session.user || !session.user.id) {
       return new Response('Unauthorized', { status: 401 });
+    }
+    
+    // Check if the user can start a new conversation based on their subscription plan
+    try {
+      // Import directly to avoid dynamic import issues
+      const { subscriptionService } = require('@/lib/subscription');
+      
+      // Log the user ID for debugging
+      console.log(`Checking if user ${session.user.id} can start a conversation`);
+      
+      const canStart = await subscriptionService.canStartConversation(session.user.id);
+      
+      console.log(`User ${session.user.id} can start conversation: ${canStart}`);
+      
+      if (!canStart) {
+        console.log(`User ${session.user.id} has reached their daily conversation limit`);
+        return new Response(
+          JSON.stringify({
+            error: 'Daily conversation limit reached',
+            code: 'USAGE_LIMIT_EXCEEDED',
+            message: 'You have reached your daily conversation limit. Please upgrade to continue chatting.'
+          }),
+          { 
+            status: 429,
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      }
+    } catch (error) {
+      console.error('Error checking conversation limits:', error);
+      // Continue with the request if there's an error checking limits
+      // This prevents users from being blocked due to technical issues
     }
 
     const userMessage = getMostRecentUserMessage(messages);
@@ -72,6 +105,10 @@ export async function POST(request: Request) {
       });
 
       await saveChat({ id, userId: session.user.id, title });
+      
+      // Increment usage counter for new conversations only
+      // This ensures we only count new conversations, not continuations of existing ones
+      await incrementUsage(session.user.id);
     } else {
       if (chat.userId !== session.user.id) {
         return new Response('Unauthorized', { status: 401 });

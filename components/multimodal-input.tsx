@@ -30,6 +30,8 @@ import { Dialog, DialogContent } from './ui/dialog';
 import equal from 'fast-deep-equal';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import { ToolkitSelector } from './toolkit-selector';
+import { useSubscription } from '@/hooks/use-subscription';
+import type { Session } from 'next-auth';
 
 function PureMultimodalInput({
   chatId,
@@ -44,6 +46,7 @@ function PureMultimodalInput({
   append,
   handleSubmit,
   className,
+  user,
 }: {
   chatId: string;
   input: UseChatHelpers['input'];
@@ -57,9 +60,13 @@ function PureMultimodalInput({
   append: UseChatHelpers['append'];
   handleSubmit: UseChatHelpers['handleSubmit'];
   className?: string;
+  user?: Session['user'];
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
+  
+  // Get subscription data for usage limit checking
+  const subscription = useSubscription(user?.id);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -182,12 +189,39 @@ function PureMultimodalInput({
   const submitForm = useCallback(
     (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
+      
+      // Check if user has reached their daily limit
+      if (subscription.plan === 'free' && subscription.remainingConversations === 0) {
+        toast.error('Daily conversation limit reached. Upgrade to continue chatting.', {
+          action: {
+            label: 'Upgrade',
+            onClick: async () => {
+              try {
+                const response = await fetch('/api/subscription/create', {
+                  method: 'POST',
+                });
+                
+                if (response.ok) {
+                  const data = await response.json();
+                  if (data.approvalUrl) {
+                    window.location.href = data.approvalUrl;
+                  }
+                }
+              } catch (error) {
+                console.error('Failed to create subscription:', error);
+              }
+            },
+          },
+        });
+        return;
+      }
+      
       handleSubmit(e, {
         experimental_attachments: attachments,
       });
       clearInput();
     },
-    [attachments, handleSubmit, clearInput],
+    [attachments, handleSubmit, clearInput, subscription],
   );
 
   return (

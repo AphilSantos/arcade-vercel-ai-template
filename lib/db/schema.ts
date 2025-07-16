@@ -9,6 +9,8 @@ import {
   primaryKey,
   foreignKey,
   boolean,
+  integer,
+  date,
 } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('User', {
@@ -16,6 +18,11 @@ export const user = pgTable('User', {
   email: varchar('email', { length: 64 }).notNull(),
   password: varchar('password', { length: 64 }),
   preferredName: varchar('preferredName', { length: 64 }).notNull(),
+  // Subscription fields
+  paid: varchar('paid', { length: 1 }), // null = free, "1" = paid
+  paypalSubscriptionId: varchar('paypalSubscriptionId', { length: 255 }),
+  dailyConversationCount: integer('dailyConversationCount').default(0),
+  lastConversationDate: date('lastConversationDate'),
 });
 
 export type User = InferSelectModel<typeof user>;

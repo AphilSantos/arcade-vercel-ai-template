@@ -238,5 +238,40 @@ As we move forward, Silicon Valley continues to reinvent itself. While some pred
     ];
   }
 
-  return [{ type: 'text-delta', textDelta: 'Unknown test prompt!' }];
+  // Generate a more dynamic response based on the user's input
+  let userContent = '';
+  
+  // Handle different content types safely
+  if (Array.isArray(recentMessage.content)) {
+    const textItem = recentMessage.content.find((item: any) => item.type === 'text');
+    if (textItem && 'text' in textItem) {
+      userContent = textItem.text || '';
+    }
+  } else if (typeof recentMessage.content === 'string') {
+    userContent = recentMessage.content;
+  }
+  
+  // Create an array of possible responses based on the content
+  const responses = [
+    "I understand your question. Let me help you with that.",
+    "That's an interesting topic. Here's what I know about it.",
+    "I'd be happy to assist with your request.",
+    "Let me provide some information on that subject.",
+    "Great question! Here's my response."
+  ];
+  
+  // Select a response based on a hash of the user content to ensure consistency
+  // This ensures the same question always gets the same response
+  const hash = userContent.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+  const responseIndex = hash % responses.length;
+  
+  return [
+    ...textToDeltas(responses[responseIndex]),
+    {
+      type: 'finish',
+      finishReason: 'stop',
+      logprobs: undefined,
+      usage: { completionTokens: 10, promptTokens: 3 },
+    },
+  ];
 };

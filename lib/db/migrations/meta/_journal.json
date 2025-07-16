@@ -8,6 +8,13 @@
       "when": 1743625613985,
       "tag": "0000_mute_prodigy",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1752671932819,
+      "tag": "0001_kind_lucky_pierre",
+      "breakpoints": true
     }
   ]
 }

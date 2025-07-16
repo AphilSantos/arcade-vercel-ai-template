@@ -1,0 +1,48 @@
+name: Daily Usage Reset
+
+on:
+  schedule:
+    # Run daily at midnight UTC (0:00)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Allow manual trigger for testing
+
+jobs:
+  reset-usage:
+    runs-on: ubuntu-latest
+    name: Reset Daily Usage Counters
+    
+    steps:
+      - name: Call Daily Reset API
+        run: |
+          response=$(curl -s -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            ${{ vars.APP_URL }}/api/cron/daily-reset)
+          
+          http_code="${response: -3}"
+          body="${response%???}"
+          
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" -ne 200 ]; then
+            echo "Daily reset failed with status $http_code"
+            echo "Response body: $body"
+            exit 1
+          fi
+          
+          echo "Daily reset completed successfully"
+
+      - name: Health Check
+        if: failure()
+        run: |
+          echo "Performing health check..."
+          health_response=$(curl -s -w "%{http_code}" \
+            ${{ vars.APP_URL }}/api/cron/daily-reset)
+          
+          health_code="${health_response: -3}"
+          health_body="${health_response%???}"
+          
+          echo "Health check status: $health_code"
+          echo "Health check response: $health_body"
