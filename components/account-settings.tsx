@@ -66,7 +66,13 @@ export function AccountSettings({ user }: AccountSettingsProps) {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <SubscriptionManagement userId={user.id} />
+                {user.id ? (
+                  <SubscriptionManagement userId={user.id} />
+                ) : (
+                  <div className="text-center py-4 text-muted-foreground">
+                    Unable to load subscription data. Please try refreshing the page.
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -127,7 +133,7 @@ export function AccountSettings({ user }: AccountSettingsProps) {
                                 : 'bg-red-300 cursor-not-allowed'
                             } text-white px-4 py-2 rounded-md transition-colors flex items-center`}
                           >
-                            {isDeleting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                            {isDeleting && <Loader2 className="size-4 mr-2 animate-spin" />}
                             Permanently Delete Account
                           </button>
                           
