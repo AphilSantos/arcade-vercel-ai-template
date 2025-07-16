@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     if (!authHeader || authHeader !== `Bearer ${expectedToken}`) {
       console.warn('Unauthorized daily reset attempt', {
         timestamp: new Date().toISOString(),
-        ip: request.ip,
         userAgent: request.headers.get('user-agent'),
       });
       return NextResponse.json(

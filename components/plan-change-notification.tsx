@@ -63,7 +63,7 @@ export function PlanChangeNotification({
         ) : (
           <p>
             When you downgrade your plan, all your conversation history, preferences, and settings 
-            will be preserved. You'll be limited to 20 conversations per day on the free plan.
+            will be preserved. You&apos;ll be limited to 20 conversations per day on the free plan.
           </p>
         )}
       </AlertDescription>

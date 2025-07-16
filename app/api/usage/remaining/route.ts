@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 
 import { subscriptionService } from '@/lib/subscription';
 import { SubscriptionError, SubscriptionErrors, handleSubscriptionError } from '@/lib/errors/subscription-errors';
@@ -15,7 +14,7 @@ import { SubscriptionError, SubscriptionErrors, handleSubscriptionError } from '
 export async function GET(req: NextRequest) {
   try {
     // Get authenticated user
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     
     if (!session?.user?.id) {
       const error = SubscriptionErrors.authenticationRequired();

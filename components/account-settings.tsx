@@ -105,7 +105,7 @@ export function AccountSettings({ user }: AccountSettingsProps) {
                         
                         <div>
                           <label htmlFor="security-confirmation" className="block text-sm font-medium text-red-700 mb-1">
-                            To confirm, type "I am agentic" below:
+                            To confirm, type &quot;I am agentic&quot; below:
                           </label>
                           <input
                             id="security-confirmation"
