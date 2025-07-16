@@ -42,7 +42,7 @@ export function PlanChangeNotification({
   
   return (
     <Alert 
-      variant={isUpgrade ? 'default' : 'outline'} 
+      variant="default"
       className={cn(
         isUpgrade 
           ? 'border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300'
@@ -50,7 +50,7 @@ export function PlanChangeNotification({
         className
       )}
     >
-      {isUpgrade ? <Check className="h-4 w-4" /> : <Info className="h-4 w-4" />}
+      {isUpgrade ? <Check className="size-4" /> : <Info className="size-4" />}
       <AlertTitle className="mb-1">
         {isUpgrade ? 'Plan Upgraded Successfully' : 'Plan Change Information'}
       </AlertTitle>
