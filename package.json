@@ -15,8 +15,7 @@
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
     "db:check": "drizzle-kit check",
-    "db:up": "drizzle-kit up",
-    "test": "export PLAYWRIGHT=True && pnpm exec playwright test --workers=4"
+    "db:up": "drizzle-kit up"
   },
   "dependencies": {
     "@ai-sdk/groq": "^1.2.8",
@@ -99,7 +98,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@playwright/test": "^1.51.1",
     "@tailwindcss/typography": "^0.5.16",
     "@types/d3-scale": "^4.0.9",
     "@types/node": "^22.14.1",

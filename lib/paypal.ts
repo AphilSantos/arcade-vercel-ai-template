@@ -180,6 +180,3 @@ class PayPalServiceImpl implements PayPalService {
 
 // Export singleton instance
 export const paypalService = new PayPalServiceImpl();
-
-// Export class for testing
-export { PayPalServiceImpl };
