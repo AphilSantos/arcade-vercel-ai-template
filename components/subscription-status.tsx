@@ -106,13 +106,13 @@ export function SubscriptionStatus({
             
             {remainingConversations <= 5 && remainingConversations > 0 && (
               <p className="text-sm text-amber-500">
-                You're running low on conversations today. Consider upgrading to our premium plan.
+                You&apos;re running low on conversations today. Consider upgrading to our premium plan.
               </p>
             )}
             
             {remainingConversations === 0 && (
               <p className="text-sm text-red-500">
-                You've reached your daily limit. Upgrade to continue chatting.
+                You&apos;ve reached your daily limit. Upgrade to continue chatting.
               </p>
             )}
           </div>

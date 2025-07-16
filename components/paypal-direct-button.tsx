@@ -79,12 +79,12 @@ export function PayPalDirectButton({
               layout: 'vertical',
               label: 'subscribe'
             },
-            createSubscription: function(data, actions) {
+            createSubscription: function(_data: any, actions: any) {
               return actions.subscription.create({
                 plan_id: planId
               });
             },
-            onApprove: async function(data) {
+            onApprove: async function(data: any) {
               console.log('Subscription approved with ID:', data.subscriptionID);
               
               // Call our API to confirm the subscription
@@ -147,7 +147,7 @@ export function PayPalDirectButton({
   return (
     <div className={className}>
       <div ref={containerRef} className="min-h-[150px] flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
       </div>
     </div>
   );

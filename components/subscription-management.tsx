@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -131,7 +130,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
   if (subscription.isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -179,7 +178,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
             <div className="flex items-center gap-3">
               {subscription.plan === 'paid' ? (
                 <>
-                  <Crown className="h-5 w-5 text-yellow-500" />
+                  <Crown className="size-5 text-yellow-500" />
                   <div>
                     <CardTitle className="text-lg">Premium Plan</CardTitle>
                     <CardDescription>Unlimited conversations</CardDescription>
@@ -187,7 +186,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
                 </>
               ) : (
                 <>
-                  <Info className="h-5 w-5 text-blue-500" />
+                  <Info className="size-5 text-blue-500" />
                   <div>
                     <CardTitle className="text-lg">Free Plan</CardTitle>
                     <CardDescription>
@@ -227,18 +226,18 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
               
               {subscription.remainingConversations <= 5 && subscription.remainingConversations > 0 && (
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTriangle className="size-4" />
                   <AlertDescription>
-                    You're running low on conversations today. Consider upgrading to Premium for unlimited access.
+                    You&apos;re running low on conversations today. Consider upgrading to Premium for unlimited access.
                   </AlertDescription>
                 </Alert>
               )}
               
               {subscription.remainingConversations === 0 && (
                 <Alert variant="destructive">
-                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTriangle className="size-4" />
                   <AlertDescription>
-                    You've reached your daily conversation limit. Upgrade to Premium to continue chatting.
+                    You&apos;ve reached your daily conversation limit. Upgrade to Premium to continue chatting.
                   </AlertDescription>
                 </Alert>
               )}
@@ -265,12 +264,12 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
               >
                 {isUpgrading ? (
                   <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="size-4 mr-2 animate-spin" />
                     Processing...
                   </>
                 ) : (
                   <>
-                    <Crown className="h-4 w-4 mr-2" />
+                    <Crown className="size-4 mr-2" />
                     Use Alternative Checkout
                   </>
                 )}
@@ -285,7 +284,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
+              <CreditCard className="size-5" />
               Subscription Details
             </CardTitle>
           </CardHeader>
@@ -298,7 +297,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
               <div>
                 <Label className="text-sm font-medium text-muted-foreground">Next Billing Date</Label>
                 <p className="text-sm font-medium flex items-center gap-1">
-                  <Calendar className="h-3 w-3" />
+                  <Calendar className="size-3" />
                   {new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}
                 </p>
               </div>
@@ -315,13 +314,13 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
                   <DialogHeader>
                     <DialogTitle>Cancel Subscription</DialogTitle>
                     <DialogDescription>
-                      We're sorry to see you go! Your subscription will remain active until the end of your current billing period.
+                      We&apos;re sorry to see you go! Your subscription will remain active until the end of your current billing period.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="cancel-reason">
-                        Please tell us why you're cancelling (optional)
+                        Please tell us why you&apos;re cancelling (optional)
                       </Label>
                       <Textarea
                         id="cancel-reason"
@@ -347,7 +346,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
                     >
                       {isCancelling ? (
                         <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          <Loader2 className="size-4 mr-2 animate-spin" />
                           Cancelling...
                         </>
                       ) : (
@@ -366,13 +365,13 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
       <Card>
         <CardHeader>
           <CardTitle>Plan Features</CardTitle>
-          <CardDescription>Compare what's included in each plan</CardDescription>
+          <CardDescription>Compare what&apos;s included in each plan</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <h4 className="font-medium flex items-center gap-2">
-                <Info className="h-4 w-4 text-blue-500" />
+                <Info className="size-4 text-blue-500" />
                 Free Plan
               </h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -385,7 +384,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
             
             <div className="space-y-3">
               <h4 className="font-medium flex items-center gap-2">
-                <Crown className="h-4 w-4 text-yellow-500" />
+                <Crown className="size-4 text-yellow-500" />
                 Premium Plan
               </h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
