@@ -65,6 +65,14 @@ export function PayPalCheckout({
         return;
       }
       
+      // Validate client ID format
+      if (!clientId.startsWith('Ab3io') && !clientId.startsWith('A')) {
+        console.error('Invalid PayPal client ID format:', clientId);
+        setError('Invalid PayPal configuration. Please check your environment variables.');
+        setLoading(false);
+        return;
+      }
+      
       console.log('Loading PayPal SDK with client ID:', clientId.substring(0, 5) + '...');
 
       // Remove any existing PayPal scripts to avoid conflicts
@@ -78,8 +86,12 @@ export function PayPalCheckout({
       
       // Use the sandbox URL for testing
       // Add currency and disable funding sources that might cause issues
-      const sdkUrl = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=subscription&vault=true&components=buttons,funding-eligibility&disable-funding=credit,card`;
+      const isProduction = process.env.NODE_ENV === 'production';
+      const sdkUrl = isProduction
+        ? `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=subscription&vault=true&components=buttons,funding-eligibility&disable-funding=credit,card`
+        : `https://www.sandbox.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=subscription&vault=true&components=buttons,funding-eligibility&disable-funding=credit,card`;
       console.log('Loading PayPal SDK from URL:', sdkUrl);
+      console.log('Environment:', isProduction ? 'Production' : 'Sandbox');
       
       script.src = sdkUrl;
       script.async = true;
@@ -313,7 +325,7 @@ export function PayPalCheckout({
       
       {loading ? (
         <div className="flex justify-center py-4">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
         </div>
       ) : (
         <>
@@ -328,7 +340,7 @@ export function PayPalCheckout({
               className="w-full"
             >
               {processingPayment ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 size-4 animate-spin" />
               ) : null}
               {buttonText}
             </Button>
@@ -343,7 +355,7 @@ export function PayPalCheckout({
               variant="outline"
             >
               {processingPayment ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 size-4 animate-spin" />
               ) : null}
               Use Direct Checkout
             </Button>

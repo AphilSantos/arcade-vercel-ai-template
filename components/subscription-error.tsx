@@ -45,14 +45,14 @@ export function SubscriptionError({
 
   return (
     <Alert
-      variant={variant === 'info' || variant === 'warning' ? 'default' : variant}
+      variant={variant === 'info' || variant === 'warning' ? 'default' : variant === 'destructive' ? 'destructive' : 'default'}
       className={cn(
         variant === 'info' && 'border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300',
         variant === 'warning' && 'border-yellow-200 bg-yellow-50 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-300',
         className
       )}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="size-4" />
       <AlertTitle className="mb-1">{errorTitle}</AlertTitle>
       <AlertDescription className="flex flex-col gap-3">
         <div>{message}</div>
@@ -73,7 +73,7 @@ export function SubscriptionError({
               variant === 'info' && 'border-blue-200 hover:bg-blue-100 hover:text-blue-900'
             )}
           >
-            <RefreshCw className="h-3 w-3 mr-2" />
+            <RefreshCw className="size-3 mr-2" />
             Try Again
           </Button>
         )}

@@ -76,7 +76,7 @@ export function SubscriptionIndicator({
       <div className={cn('flex items-center gap-2', className)}>
         {plan === 'paid' ? (
           <Badge variant="default" className="bg-green-600 text-white">
-            <Crown className="h-3 w-3 mr-1" />
+            <Crown className="size-3 mr-1" />
             Premium
           </Badge>
         ) : (
@@ -90,9 +90,9 @@ export function SubscriptionIndicator({
             onClick={upgrading ? undefined : handleUpgradeClick}
           >
             {upgrading ? (
-              <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+              <Loader2 className="size-3 mr-1 animate-spin" />
             ) : remainingConversations <= 5 && remainingConversations > 0 && (
-              <AlertTriangle className="h-3 w-3 mr-1" />
+              <AlertTriangle className="size-3 mr-1" />
             )}
             {remainingConversations}/5
           </Badge>
@@ -109,12 +109,12 @@ export function SubscriptionIndicator({
           <div className="flex items-center gap-2">
             {plan === 'paid' ? (
               <>
-                <Crown className="h-4 w-4 text-yellow-500" />
+                <Crown className="size-4 text-yellow-500" />
                 <Badge variant="default" className="bg-green-600">Premium</Badge>
               </>
             ) : (
               <>
-                <Info className="h-4 w-4 text-blue-500" />
+                <Info className="size-4 text-blue-500" />
                 <Badge variant="secondary">Free</Badge>
               </>
             )}
@@ -161,14 +161,14 @@ export function SubscriptionIndicator({
             
             {remainingConversations <= 5 && remainingConversations > 0 && (
               <p className="text-xs text-amber-600 flex items-center gap-1">
-                <AlertTriangle className="h-3 w-3" />
+                <AlertTriangle className="size-3" />
                 Running low on conversations today
               </p>
             )}
             
             {remainingConversations === 0 && (
               <p className="text-xs text-red-600 flex items-center gap-1">
-                <AlertTriangle className="h-3 w-3" />
+                <AlertTriangle className="size-3" />
                 Daily limit reached. Upgrade to continue chatting.
               </p>
             )}

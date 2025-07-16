@@ -48,7 +48,7 @@ class PayPalServiceImpl implements PayPalService {
           oAuthClientId: clientId,
           oAuthClientSecret: clientSecret,
         },
-        environment: Environment.Sandbox, // Change to Environment.Production for live
+        environment: Environment.Production, // Using production environment
       });
       console.log('PayPal client initialized successfully with client ID:', clientId.substring(0, 5) + '...');
     }

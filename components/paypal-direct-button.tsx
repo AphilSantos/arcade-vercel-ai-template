@@ -40,37 +40,18 @@ export function PayPalDirectButton({
       return;
     }
     
-    console.log('Loading PayPal SDK with client ID:', clientId.substring(0, 5) + '...');
-
-    // Remove any existing PayPal scripts to avoid conflicts
-    const existingScript = document.getElementById('paypal-script');
-    if (existingScript) {
-      try {
-        existingScript.parentNode?.removeChild(existingScript);
-      } catch (e) {
-        console.error('Error removing existing PayPal script:', e);
-      }
+    // Validate client ID format (PayPal client IDs should be longer and have specific format)
+    if (clientId.length < 50) {
+      console.error('PayPal client ID appears to be invalid or truncated:', clientId);
+      return;
     }
 
-    // Create the PayPal SDK script
-    const script = document.createElement('script');
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&vault=true&intent=subscription&currency=USD`;
-    script.dataset.sdkIntegrationSource = 'button-factory';
-    script.id = 'paypal-script';
-    script.async = true;
-    
-    // Set a timeout to detect if the script takes too long to load
-    const timeoutId = setTimeout(() => {
-      if (!window.paypal) {
-        console.error('PayPal SDK load timeout');
-      }
-    }, 10000); // 10 seconds timeout
-    
-    script.onload = () => {
-      clearTimeout(timeoutId);
-      console.log('PayPal SDK loaded successfully');
-      
+    // Function to render PayPal buttons
+    const renderPayPalButtons = () => {
       if (window.paypal && containerRef.current) {
+        // Clear any existing content
+        containerRef.current.innerHTML = '';
+        
         try {
           window.paypal.Buttons({
             style: {
@@ -80,6 +61,7 @@ export function PayPalDirectButton({
               label: 'subscribe'
             },
             createSubscription: function(_data: any, actions: any) {
+              console.log('Creating subscription with plan ID:', planId);
               return actions.subscription.create({
                 plan_id: planId
               });
@@ -114,6 +96,9 @@ export function PayPalDirectButton({
               } catch (error) {
                 console.error('Error confirming subscription:', error);
               }
+            },
+            onError: function(err: any) {
+              console.error('PayPal button error:', err);
             }
           }).render('#' + containerId);
         } catch (error) {
@@ -121,26 +106,84 @@ export function PayPalDirectButton({
         }
       }
     };
+
+    // Check if PayPal SDK is already loaded
+    if (window.paypal) {
+      console.log('PayPal SDK already loaded, rendering buttons');
+      renderPayPalButtons();
+      return;
+    }
+
+    // Check if script is already being loaded
+    const existingScript = document.getElementById('paypal-script');
+    if (existingScript) {
+      console.log('PayPal SDK script already exists, waiting for load');
+      const checkPayPal = setInterval(() => {
+        if (window.paypal) {
+          clearInterval(checkPayPal);
+          renderPayPalButtons();
+        }
+      }, 100);
+      
+      // Clear interval after 10 seconds to prevent infinite checking
+      setTimeout(() => clearInterval(checkPayPal), 10000);
+      return;
+    }
+    
+    console.log('Loading PayPal SDK with client ID:', clientId.substring(0, 10) + '...');
+
+    // Create the PayPal SDK script
+    const script = document.createElement('script');
+    
+    // Use production PayPal environment
+    const useSandbox = false; // Using production PayPal credentials
+    const baseUrl = useSandbox ? 'https://www.sandbox.paypal.com' : 'https://www.paypal.com';
+    
+    script.src = `${baseUrl}/sdk/js?client-id=${clientId}&vault=true&intent=subscription&currency=USD&components=buttons`;
+    script.dataset.sdkIntegrationSource = 'button-factory';
+    script.id = 'paypal-script';
+    script.async = true;
+    
+    console.log('PayPal Environment:', useSandbox ? 'Sandbox' : 'Production');
+    console.log('PayPal SDK URL:', script.src);
+    
+    // Set a timeout to detect if the script takes too long to load
+    const timeoutId = setTimeout(() => {
+      if (!window.paypal) {
+        console.error('PayPal SDK load timeout');
+      }
+    }, 10000); // 10 seconds timeout
+    
+    script.onload = () => {
+      clearTimeout(timeoutId);
+      console.log('PayPal SDK loaded successfully');
+      renderPayPalButtons();
+    };
     
     script.onerror = (e) => {
       clearTimeout(timeoutId);
       console.error('Failed to load PayPal SDK:', e);
+      
+      // Show user-friendly error message
+      if (containerRef.current) {
+        containerRef.current.innerHTML = `
+          <div class="text-center p-4 border border-red-200 rounded-lg bg-red-50">
+            <p class="text-red-800 font-medium">PayPal Loading Error</p>
+            <p class="text-red-600 text-sm mt-1">Unable to load PayPal checkout. Please try refreshing the page.</p>
+            <button onclick="window.location.reload()" class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+              Refresh Page
+            </button>
+          </div>
+        `;
+      }
     };
 
     document.body.appendChild(script);
     scriptRef.current = script;
     
-    // Cleanup function - simplified to avoid errors
+    // Cleanup function
     return () => {
       clearTimeout(timeoutId);
-      
-      // We don't remove the script on cleanup to avoid issues with hot reloading
-      // The script will be replaced on the next render if needed
-      
-      // Just clean up the callback
-      if (window.onPayPalSubscriptionSuccess) {
-        delete window.onPayPalSubscriptionSuccess;
-      }
     };
   }, [planId, onSuccess]);
   

@@ -310,19 +310,19 @@ function PureMultimodalInput({
                 {
                   id: 'empathic-voice',
                   label: 'Empathic Voice',
-                  icon: <User className="h-4 w-4" />,
+                  icon: <User className="size-4" />,
                   onClick: () => setActiveModal('empathic-voice'),
                 },
                 {
                   id: 'computer',
                   label: 'Computer',
-                  icon: <Terminal className="h-4 w-4" />,
+                  icon: <Terminal className="size-4" />,
                   onClick: () => setActiveModal('computer'),
                 },
                 {
                   id: 'fragments',
                   label: 'Fragments',
-                  icon: <Puzzle className="h-4 w-4" />,
+                  icon: <Puzzle className="size-4" />,
                   onClick: () => setActiveModal('fragments'),
                 },
               ]}

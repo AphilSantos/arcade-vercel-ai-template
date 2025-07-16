@@ -31,10 +31,10 @@ export function OverflowMenu({ items, className }: OverflowMenuProps) {
         type="button"
         variant="ghost"
         size="icon"
-        className="h-8 w-8 p-0 relative z-10"
+        className="size-8 p-0 relative z-10"
         onClick={() => setIsOpen(true)}
       >
-        <MoreHorizontal className="h-4 w-4" />
+        <MoreHorizontal className="size-4" />
         <span className="sr-only">More options</span>
       </Button>
 
@@ -51,7 +51,7 @@ export function OverflowMenu({ items, className }: OverflowMenuProps) {
                 className="flex items-center rounded-lg p-3 text-left hover:bg-accent w-full"
                 onClick={() => handleItemClick(item)}
               >
-                <span className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-accent">
+                <span className="mr-3 flex size-8 items-center justify-center rounded-full bg-accent">
                   {item.icon}
                 </span>
                 <div>

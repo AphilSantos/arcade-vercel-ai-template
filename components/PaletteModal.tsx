@@ -24,7 +24,7 @@ const PaletteModal = () => {
         className="inline-flex items-center justify-center rounded-md p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
         onClick={() => setIsOpen(true)}
       >
-        <Paintbrush className="h-5 w-5" />
+        <Paintbrush className="size-5" />
       </button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0">
