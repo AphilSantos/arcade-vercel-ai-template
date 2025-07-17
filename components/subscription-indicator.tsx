@@ -32,31 +32,15 @@ export function SubscriptionIndicator({
   const [upgrading, setUpgrading] = useState(false);
   const router = useRouter();
 
-  const handleUpgradeClick = async () => {
+  const handleUpgradeClick = () => {
     setUpgrading(true);
     try {
-      const response = await fetch('/api/subscription/create', {
-        method: 'POST',
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        // Extract error message from response if available
-        const errorMessage = data.message || data.error || 'Failed to create subscription';
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-      
-      if (data.approvalUrl) {
-        toast.success('Redirecting to PayPal for checkout');
-        router.push(data.approvalUrl);
-      } else {
-        toast.error('No approval URL returned from payment service');
-      }
+      // Navigate to account settings page instead of PayPal checkout
+      router.push('/account');
+      toast.success('Redirecting to account settings');
     } catch (error) {
-      console.error('Failed to create subscription:', error);
-      toast.error('Unable to start the upgrade process. Please try again later.');
+      console.error('Navigation error:', error);
+      toast.error('Unable to navigate to account settings. Please try again.');
     } finally {
       setUpgrading(false);
     }

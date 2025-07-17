@@ -53,12 +53,36 @@ export function PayPalDirectButton({
         containerRef.current.innerHTML = '';
         
         try {
+          // Detect theme for PayPal button styling
+          const isDarkMode = document.documentElement.classList.contains('dark') || 
+                           window.matchMedia('(prefers-color-scheme: dark)').matches;
+          
+          // Add custom dark mode styles for PayPal container
+          if (isDarkMode && containerRef.current) {
+            // Create a style element for dark mode PayPal container
+            const styleEl = document.createElement('style');
+            styleEl.innerHTML = `
+              #${containerId} {
+                background-color: #1e1e1e !important;
+              }
+              #${containerId} iframe {
+                filter: invert(0.85) hue-rotate(180deg) !important;
+                background-color: transparent !important;
+              }
+              #${containerId} .paypal-powered-by {
+                filter: invert(0.85) hue-rotate(180deg) !important;
+              }
+            `;
+            document.head.appendChild(styleEl);
+          }
+          
           window.paypal.Buttons({
             style: {
               shape: 'rect',
-              color: 'blue',
+              color: isDarkMode ? 'black' : 'blue',
               layout: 'vertical',
-              label: 'subscribe'
+              label: 'subscribe',
+              height: 45
             },
             createSubscription: function(_data: any, actions: any) {
               console.log('Creating subscription with plan ID:', planId);
@@ -164,13 +188,13 @@ export function PayPalDirectButton({
       clearTimeout(timeoutId);
       console.error('Failed to load PayPal SDK:', e);
       
-      // Show user-friendly error message
+      // Show user-friendly error message with theme support
       if (containerRef.current) {
         containerRef.current.innerHTML = `
-          <div class="text-center p-4 border border-red-200 rounded-lg bg-red-50">
-            <p class="text-red-800 font-medium">PayPal Loading Error</p>
-            <p class="text-red-600 text-sm mt-1">Unable to load PayPal checkout. Please try refreshing the page.</p>
-            <button onclick="window.location.reload()" class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+          <div class="text-center p-4 border border-destructive/20 rounded-lg bg-destructive/10 dark:border-red-800 dark:bg-red-950/20">
+            <p class="text-destructive font-medium dark:text-red-400">PayPal Loading Error</p>
+            <p class="text-destructive/80 text-sm mt-1 dark:text-red-300">Unable to load PayPal checkout. Please try refreshing the page.</p>
+            <button onclick="window.location.reload()" class="mt-2 px-4 py-2 bg-destructive text-destructive-foreground rounded hover:bg-destructive/90 dark:bg-red-600 dark:hover:bg-red-700 transition-colors">
               Refresh Page
             </button>
           </div>
@@ -188,8 +212,12 @@ export function PayPalDirectButton({
   }, [planId, onSuccess]);
   
   return (
-    <div className={className}>
-      <div ref={containerRef} className="min-h-[150px] flex items-center justify-center">
+    <div className={`w-full ${className}`}>
+      <div 
+        ref={containerRef} 
+        className="min-h-[150px] flex items-center justify-center w-full bg-card dark:bg-card/80 border border-border rounded-lg p-4 shadow-sm"
+        style={{ maxWidth: '500px', margin: '0 auto' }}
+      >
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
       </div>
     </div>

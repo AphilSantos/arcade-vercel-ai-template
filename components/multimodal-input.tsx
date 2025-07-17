@@ -195,21 +195,9 @@ function PureMultimodalInput({
         toast.error('Daily conversation limit reached. Upgrade to continue chatting.', {
           action: {
             label: 'Upgrade',
-            onClick: async () => {
-              try {
-                const response = await fetch('/api/subscription/create', {
-                  method: 'POST',
-                });
-                
-                if (response.ok) {
-                  const data = await response.json();
-                  if (data.approvalUrl) {
-                    window.location.href = data.approvalUrl;
-                  }
-                }
-              } catch (error) {
-                console.error('Failed to create subscription:', error);
-              }
+            onClick: () => {
+              // Navigate to account settings page
+              window.location.href = '/account';
             },
           },
         });

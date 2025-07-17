@@ -93,25 +93,9 @@ export function Chat({
         toast.error('Daily conversation limit reached. Upgrade to continue chatting.', {
           action: {
             label: 'Upgrade',
-            onClick: async () => {
-              try {
-                const response = await fetch('/api/subscription/create', {
-                  method: 'POST',
-                });
-                
-                if (response.ok) {
-                  const data = await response.json();
-                  if (data.approvalUrl) {
-                    window.location.href = data.approvalUrl;
-                  }
-                } else {
-                  const errorData = await response.json();
-                  toast.error(`Failed to create subscription: ${errorData.error || 'Unknown error'}`);
-                }
-              } catch (error) {
-                console.error('Failed to create subscription:', error);
-                toast.error('Failed to create subscription. Please try again later.');
-              }
+            onClick: () => {
+              // Navigate to account settings page
+              window.location.href = '/account';
             },
           },
           duration: 10000, // Show for 10 seconds to give user time to click

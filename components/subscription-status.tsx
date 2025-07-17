@@ -38,25 +38,13 @@ export function SubscriptionStatus({
         setUpgrading(false);
       }
     } else {
-      // Default behavior - redirect to a subscription API route
+      // Navigate directly to account settings page
       setUpgrading(true);
       try {
-        const response = await fetch('/api/subscription/create', {
-          method: 'POST',
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to create subscription');
-        }
-        
-        const data = await response.json();
-        
-        // Redirect to PayPal checkout
-        if (data.approvalUrl) {
-          router.push(data.approvalUrl);
-        }
+        // Redirect to account settings page
+        router.push('/account');
       } catch (error) {
-        console.error('Failed to create subscription:', error);
+        console.error('Failed to navigate to account settings:', error);
       } finally {
         setUpgrading(false);
       }
@@ -124,7 +112,7 @@ export function SubscriptionStatus({
             onClick={handleUpgradeClick} 
             disabled={upgrading || isLoading}
           >
-            {upgrading ? 'Redirecting to PayPal...' : 'Upgrade to Premium ($10/month)'}
+            {upgrading ? 'Redirecting...' : 'Upgrade to Premium'}
           </Button>
         )}
         {plan === 'paid' && (

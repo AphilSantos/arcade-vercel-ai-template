@@ -48,35 +48,16 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
     }
   }, []);
 
-  const handleUpgrade = async () => {
+  // This function now simply refreshes the page to show the PayPal buttons
+  const handleUpgrade = () => {
     setIsUpgrading(true);
     try {
-      const response = await fetch('/api/subscription/create', {
-        method: 'POST',
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        // Extract specific error information if available
-        const errorMessage = data.message || data.error || 'Failed to create subscription';
-        const errorCode = data.error || 'UNKNOWN_ERROR';
-        
-        console.error(`Subscription creation failed: ${errorCode} - ${errorMessage}`);
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-      
-      if (data.approvalUrl) {
-        toast.success('Redirecting to PayPal for checkout');
-        window.location.href = data.approvalUrl;
-      } else {
-        toast.error('No approval URL returned from payment service');
-        throw new Error('Missing approval URL in response');
-      }
+      // Just refresh the current page to show the PayPal buttons
+      window.location.reload();
+      toast.success('Refreshing payment options');
     } catch (error) {
-      console.error('Failed to create subscription:', error);
-      toast.error('Failed to start upgrade process. Please try again later.');
+      console.error('Failed to refresh page:', error);
+      toast.error('Failed to refresh payment options. Please try again.');
     } finally {
       setIsUpgrading(false);
     }
@@ -243,9 +224,10 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
               )}
               
               {/* PayPal Direct Button Integration */}
-              <div className="mb-4">
+              <div className="mb-4 flex justify-center">
                 <PayPalDirectButton 
                   planId={process.env.PAYPAL_PLAN_ID || 'P-5K585630K51724217NB364QI'}
+                  className="max-w-md w-full mx-auto"
                   onSuccess={() => {
                     toast.success('Subscription activated successfully!');
                     if (subscription.refresh) {
@@ -254,26 +236,6 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
                   }}
                 />
               </div>
-              
-              {/* Fallback button */}
-              <Button 
-                onClick={handleUpgrade}
-                disabled={isUpgrading}
-                className="w-full"
-                variant="outline"
-              >
-                {isUpgrading ? (
-                  <>
-                    <Loader2 className="size-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Crown className="size-4 mr-2" />
-                    Use Alternative Checkout
-                  </>
-                )}
-              </Button>
             </div>
           </CardContent>
         )}
@@ -385,7 +347,7 @@ export function SubscriptionManagement({ userId }: SubscriptionManagementProps) 
             <div className="space-y-3">
               <h4 className="font-medium flex items-center gap-2">
                 <Crown className="size-4 text-yellow-500" />
-                Premium Plan
+                Premium Plan <span className="ml-2 text-sm font-semibold text-green-600 dark:text-green-400">$10/month</span>
               </h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• Unlimited conversations</li>
