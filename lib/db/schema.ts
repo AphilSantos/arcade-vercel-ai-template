@@ -158,3 +158,38 @@ export const suggestion = pgTable(
 );
 
 export type Suggestion = InferSelectModel<typeof suggestion>;
+
+// Simple Todo List Feature
+export const todoList = pgTable('UserTodoList', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  title: text('title').notNull(),
+  userId: uuid('userId')
+    .notNull()
+    .references(() => user.id),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+});
+
+export type TodoList = InferSelectModel<typeof todoList>;
+
+export const task = pgTable('UserTask', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  todoListId: uuid('todoListId')
+    .notNull()
+    .references(() => todoList.id),
+  title: text('title').notNull(),
+  completed: boolean('completed').notNull().default(false),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+});
+
+export type Task = InferSelectModel<typeof task>;
+
+export const taskContext = pgTable('TaskContext', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  taskId: uuid('taskId')
+    .notNull()
+    .references(() => task.id),
+  content: text('content').notNull(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+});
+
+export type TaskContext = InferSelectModel<typeof taskContext>;

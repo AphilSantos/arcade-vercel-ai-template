@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { PlusIcon } from '@/components/icons';
 import { SidebarHistory } from '@/components/sidebar-history';
 import { SidebarUserNav } from '@/components/sidebar-user-nav';
+import { TodoListSidebar } from '@/components/todo-list';
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -124,7 +125,17 @@ export function AppSidebar({ user }: { user: User | undefined }) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarHistory user={user} />
+        <div className="flex flex-col h-full">
+          {/* Top half: Chat History */}
+          <div className="h-1/2 overflow-y-auto border-b">
+            <SidebarHistory user={user} />
+          </div>
+          
+          {/* Bottom half: Todo List */}
+          <div className="h-1/2 overflow-y-auto pt-2">
+            <TodoListSidebar user={user} />
+          </div>
+        </div>
       </SidebarContent>
       <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>
     </Sidebar>
