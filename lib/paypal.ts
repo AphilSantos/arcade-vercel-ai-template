@@ -62,16 +62,16 @@ class PayPalServiceImpl implements PayPalService {
   async createSubscription(planId: string): Promise<string> {
     try {
       console.log(`Creating subscription for plan: ${planId}`);
-      
+
       if (!this.isConfigured) {
         console.error('PayPal API credentials are not properly configured');
         throw new Error('PayPal API credentials are not properly configured');
       }
-      
+
       // For debugging purposes, log the client credentials
       console.log('PayPal Client ID:', process.env.PAYPAL_API_KEY?.substring(0, 5) + '...');
       console.log('PayPal Environment:', process.env.NODE_ENV === 'production' ? 'Production' : 'Sandbox');
-      
+
       try {
         // In a production implementation, we would use the PayPal SDK like this:
         // const request = new paypal.SubscriptionCreateRequest();
@@ -84,7 +84,7 @@ class PayPalServiceImpl implements PayPalService {
         // });
         // const response = await this.client.execute(request);
         // return response.result.id;
-        
+
         // For now, we'll use a mock implementation for testing
         return `I-${Date.now()}`;
       } catch (sdkError: any) {
@@ -109,7 +109,7 @@ class PayPalServiceImpl implements PayPalService {
       // 1. Extracting the signature from headers
       // 2. Recreating the signature using the webhook secret
       // 3. Comparing signatures
-      
+
       // For now, we'll implement basic validation
       const paypalSignature = headers['paypal-transmission-sig'];
       const paypalCertId = headers['paypal-cert-id'];
@@ -139,7 +139,7 @@ class PayPalServiceImpl implements PayPalService {
       // For now, return mock subscription details since the SDK structure needs to be verified
       // In a real implementation, you would use the correct PayPal SDK methods
       console.log(`Getting subscription details for: ${subscriptionId}`);
-      
+
       return {
         id: subscriptionId,
         status: 'ACTIVE',
@@ -168,7 +168,7 @@ class PayPalServiceImpl implements PayPalService {
       // For now, use mock implementation since the SDK structure needs to be verified
       // In a real implementation, you would use the correct PayPal SDK methods
       console.log(`Cancelling PayPal subscription ${subscriptionId} with reason: ${reason}`);
-      
+
       // Simulate successful cancellation
       console.log(`PayPal subscription ${subscriptionId} cancelled successfully`);
     } catch (error) {
