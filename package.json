@@ -23,6 +23,7 @@
     "@ai-sdk/react": "^1.2.9",
     "@ai-sdk/xai": "^1.2.13",
     "@arcadeai/arcadejs": "^1.2.1",
+    "@clerk/nextjs": "^6.25.4",
     "@codemirror/lang-javascript": "^6.2.3",
     "@codemirror/lang-python": "^6.1.7",
     "@codemirror/state": "^6.5.2",
