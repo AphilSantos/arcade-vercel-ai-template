@@ -25,6 +25,7 @@ import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { getWeather } from '@/lib/ai/tools/get-weather';
 import { readDocument } from '@/lib/ai/tools/read-document';
 import { generateImageTool, editImageTool, generateVideoTool } from '@/lib/tools/image-tools';
+import { describeImageTool, editImageWithVisionTool } from '@/lib/tools/vision-tools';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { arcadeServer } from '@/lib/arcade/server';
@@ -207,6 +208,9 @@ export async function POST(request: Request) {
             generateImage: generateImageTool,
             editImage: editImageTool,
             generateVideo: generateVideoTool,
+            // Vision tools for image analysis
+            describeImage: describeImageTool,
+            editImageWithVision: editImageWithVisionTool,
           },
           onFinish: async ({ response }) => {
             if (session.user?.id) {
