@@ -7,7 +7,7 @@ import { SubscriptionIndicator } from './subscription-indicator';
 export const Overview = ({ user }: { user: Session['user'] | undefined }) => {
   // Get subscription data if user is logged in
   const subscription = useSubscription(user?.id);
-  
+
   return (
     <motion.div
       key="overview"
@@ -36,9 +36,9 @@ export const Overview = ({ user }: { user: Session['user'] | undefined }) => {
         <h2 className="text-xl sm:text-2xl md:text-4xl font-medium mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400">
           How can I help you today?
         </h2>
-        
-        {/* Show subscription status for logged-in users */}
-        {user && (
+
+        {/* Show subscription status for logged-in users - only show for free users */}
+        {user && subscription.plan === 'free' && (
           <div className="mt-8 max-w-md mx-auto">
             <SubscriptionIndicator
               plan={subscription.plan}

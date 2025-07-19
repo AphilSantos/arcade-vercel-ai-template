@@ -30,12 +30,17 @@ import {
 } from './ui/dialog';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { SubscriptionIndicator } from '@/components/subscription-indicator';
+import { useSubscription } from '@/hooks/use-subscription';
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
   const [openDeleteAllChatsDialog, setOpenDeleteAllChatsDialog] =
     useState(false);
+
+  // Get subscription data for the current user
+  const subscription = useSubscription(user?.id);
 
   return (
     <Sidebar className="group-data-[side=left]:border-r-0">
@@ -130,14 +135,26 @@ export function AppSidebar({ user }: { user: User | undefined }) {
           <div className="h-1/2 overflow-y-auto border-b">
             <SidebarHistory user={user} />
           </div>
-          
+
           {/* Bottom half: Todo List */}
           <div className="h-1/2 overflow-y-auto pt-2">
             <TodoListSidebar user={user} />
           </div>
         </div>
       </SidebarContent>
-      <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>
+      <SidebarFooter>
+        {user && (
+          <div className="flex flex-col gap-2">
+            <SubscriptionIndicator
+              plan={subscription.plan}
+              remainingConversations={subscription.remainingConversations}
+              isLoading={subscription.isLoading}
+              compact={true}
+            />
+            <SidebarUserNav user={user} />
+          </div>
+        )}
+      </SidebarFooter>
     </Sidebar>
   );
 }
