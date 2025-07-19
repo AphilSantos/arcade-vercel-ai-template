@@ -499,7 +499,7 @@ const FragmentsModal = ({
   <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
     <div className="flex-1 overflow-hidden">
       <iframe
-        src="https://enzostvs-deepsite.hf.space/projects/new"
+        src="https://llamacoder.together.ai/"
         className="size-full border-0 rounded-lg"
         title="Fragments Interface"
       />

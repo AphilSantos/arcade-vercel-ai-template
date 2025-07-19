@@ -1,4 +1,4 @@
-import type { Attachment } from 'ai';
+import type { Attachment, UIMessage } from 'ai';
 
 /**
  * Converts blob URLs to base64 data URLs for reliable AI model access
