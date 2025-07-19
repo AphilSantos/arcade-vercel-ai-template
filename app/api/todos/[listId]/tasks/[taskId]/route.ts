@@ -6,13 +6,13 @@ import postgres from 'postgres';
 import { task } from '@/lib/db/schema';
 
 // Database connection
-const client = postgres(process.env.POSTGRES_URL!);
+const client = postgres(process.env.POSTGRES_URL || '');
 const db = drizzle(client);
 
 // PATCH /api/todos/[listId]/tasks/[taskId] - Update a task
 export async function PATCH(
     request: Request,
-    { params }: { params: { listId: string; taskId: string } }
+    { params }: { params: Promise<{ listId: string; taskId: string }> }
 ) {
     try {
         const session = await auth();
@@ -21,7 +21,7 @@ export async function PATCH(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { taskId } = params;
+        const { taskId } = await params;
         const { completed } = await request.json();
 
         if (typeof completed !== 'boolean') {
@@ -47,8 +47,8 @@ export async function PATCH(
 
 // DELETE /api/todos/[listId]/tasks/[taskId] - Delete a task
 export async function DELETE(
-    request: Request,
-    { params }: { params: { listId: string; taskId: string } }
+    _request: Request,
+    { params }: { params: Promise<{ listId: string; taskId: string }> }
 ) {
     try {
         const session = await auth();
@@ -57,7 +57,7 @@ export async function DELETE(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { taskId } = params;
+        const { taskId } = await params;
 
         const deletedTask = await db
             .delete(task)

@@ -7,13 +7,13 @@ import { task } from '@/lib/db/schema';
 import type { Task } from '@/lib/db/schema';
 
 // Database connection
-const client = postgres(process.env.POSTGRES_URL!);
+const client = postgres(process.env.POSTGRES_URL || '');
 const db = drizzle(client);
 
 // GET /api/todos/[listId]/tasks - Get all tasks for a todo list
 export async function GET(
-    request: Request,
-    { params }: { params: { listId: string } }
+    _request: Request,
+    { params }: { params: Promise<{ listId: string }> }
 ) {
     try {
         const session = await auth();
@@ -22,7 +22,7 @@ export async function GET(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { listId } = params;
+        const { listId } = await params;
 
         const tasks = await db
             .select()
@@ -39,7 +39,7 @@ export async function GET(
 // POST /api/todos/[listId]/tasks - Create a new task
 export async function POST(
     request: Request,
-    { params }: { params: { listId: string } }
+    { params }: { params: Promise<{ listId: string }> }
 ) {
     try {
         const session = await auth();
@@ -48,7 +48,7 @@ export async function POST(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { listId } = params;
+        const { listId } = await params;
         const { title } = await request.json();
 
         if (!title || typeof title !== 'string' || title.trim().length === 0) {

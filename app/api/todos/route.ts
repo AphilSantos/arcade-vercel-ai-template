@@ -7,7 +7,7 @@ import { todoList, task } from '@/lib/db/schema';
 import type { TodoList, Task } from '@/lib/db/schema';
 
 // Database connection
-const client = postgres(process.env.POSTGRES_URL!);
+const client = postgres(process.env.POSTGRES_URL || '');
 const db = drizzle(client);
 
 // GET /api/todos - Get all todo lists for the current user
