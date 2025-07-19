@@ -177,11 +177,11 @@ export async function POST(request: Request) {
 
     // Process messages to convert blob URLs to base64 data URLs for AI model access
     console.log('=== PROCESSING MESSAGES FOR AI ===');
-    console.log('Original messages with attachments:', messages.filter(m => m.experimental_attachments?.length > 0).length);
+    console.log('Original messages with attachments:', messages.filter(m => m.experimental_attachments && m.experimental_attachments.length > 0).length);
 
     const processedMessages = await processMessagesForAI(messages);
 
-    console.log('Processed messages with attachments:', processedMessages.filter(m => m.experimental_attachments?.length > 0).length);
+    console.log('Processed messages with attachments:', processedMessages.filter(m => m.experimental_attachments && m.experimental_attachments.length > 0).length);
     console.log('=== END PROCESSING ===');
 
     return createDataStreamResponse({
