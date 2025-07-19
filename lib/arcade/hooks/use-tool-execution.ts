@@ -91,7 +91,7 @@ export const useToolExecution = ({
     waitForAuth,
   ]);
 
-  const debouncedExecute = useDebounceCallback(executeToolCallback, 1000);
+  const debouncedExecute = useDebounceCallback(executeToolCallback, 500);
 
   useLayoutEffect(() => {
     debouncedExecute();

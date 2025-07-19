@@ -6,6 +6,7 @@ import { DocumentToolResult } from './document';
 import { ToolResultAccordion } from './tool-result-accordion';
 import OneWayFlightMessage from './arcade-tool-calls/flights/search-search-one-way-flights';
 import RoundtripFlightMessage from './arcade-tool-calls/flights/search-search-roundtrip-flights';
+import { ImageResult } from './image-result';
 
 type ToolResultProps = {
   toolInvocation: Extract<ToolInvocation, { state: 'result' }>;
@@ -49,6 +50,19 @@ export function ToolResult({ toolInvocation, isReadonly }: ToolResultProps) {
 
   if (toolName === 'Search_SearchRoundtripFlights' && result?.output?.value) {
     return <RoundtripFlightMessage data={result.output.value} />;
+  }
+
+  // Handle ImageRouter tools
+  if (toolName === 'generateImage') {
+    return <ImageResult result={result} type="image" />;
+  }
+
+  if (toolName === 'editImage') {
+    return <ImageResult result={result} type="image" />;
+  }
+
+  if (toolName === 'generateVideo') {
+    return <ImageResult result={result} type="video" />;
   }
 
   return <ToolResultAccordion toolInvocation={toolInvocation} />;

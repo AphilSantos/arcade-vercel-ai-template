@@ -18,7 +18,7 @@ import { getAuthProviderByToolkitId } from '@/lib/arcade/auth-providers';
 import useSWR from 'swr';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
-import { MAX_TOOLKITS } from '@/lib/arcade/utils';
+import { MAX_TOOLKITS_FREE } from '@/lib/arcade/utils';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -43,6 +43,15 @@ export function ToolkitSelector() {
     '/api/toolkits',
     fetcher,
   );
+
+  const { data: limitsData, isLoading: limitsLoading } = useSWR<{
+    plan: 'free' | 'paid';
+    maxToolkits: number;
+    isPremium: boolean;
+  }>('/api/toolkits/limits', fetcher);
+
+  const maxToolkits = limitsData?.maxToolkits || MAX_TOOLKITS_FREE;
+  const isPremium = limitsData?.isPremium || false;
 
   React.useEffect(() => {
     if (toolkitIds) {
@@ -80,9 +89,12 @@ export function ToolkitSelector() {
     if (selectedToolkits.includes(toolkitId)) {
       setSelectedToolkits((prev) => prev.filter((id) => id !== toolkitId));
     } else {
-      if (selectedToolkits.length >= MAX_TOOLKITS) {
+      if (selectedToolkits.length >= maxToolkits) {
+        const upgradeMessage = !isPremium 
+          ? ' Upgrade to premium for more toolkits!' 
+          : '';
         toast.error(
-          `You can only select up to ${MAX_TOOLKITS} toolkits at a time`,
+          `You can only select up to ${maxToolkits} toolkits at a time.${upgradeMessage}`,
         );
         return;
       }
@@ -101,7 +113,7 @@ export function ToolkitSelector() {
         >
           <Wrench className="size-4 text-muted-foreground" />
           <span className="text-sm font-medium ">Toolkits</span>
-          {isLoading ? (
+          {isLoading || limitsLoading ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <>
@@ -127,13 +139,27 @@ export function ToolkitSelector() {
           <CommandList>
             <CommandEmpty>No toolkits found.</CommandEmpty>
             <CommandGroup>
-              {isLoading ? (
+              {!limitsLoading && (
+                <div className="px-2 py-1.5 text-xs text-muted-foreground border-b">
+                  {selectedToolkits.length}/{maxToolkits} toolkits selected
+                  {isPremium && (
+                    <Badge variant="secondary" className="ml-2 text-xs">
+                      Premium
+                    </Badge>
+                  )}
+                  {!isPremium && (
+                    <span className="ml-2 text-xs text-blue-600">
+                      Upgrade for more
+                    </span>
+                  )}
+                </div>
+              )}
+              {isLoading || limitsLoading ? (
                 <div className="text-sm text-muted-foreground p-2">
                   Loading toolkits...
                 </div>
               ) : (
                 <>
-                  <div className="h-px bg-border my-1" />
                   {toolkits.map((toolkit) => (
                     <CommandItem
                       key={toolkit.id}

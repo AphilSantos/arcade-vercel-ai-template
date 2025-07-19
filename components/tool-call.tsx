@@ -5,6 +5,7 @@ import { cx } from 'class-variance-authority';
 import { Weather } from './weather';
 import { DocumentPreview } from './document-preview';
 import { ToolArcadeAuthorization } from './tool-arcade-authorization';
+import { ToolMediaAuthorization } from './tool-media-authorization';
 
 type ToolCallProps = {
   toolInvocation: ToolInvocation;
@@ -56,6 +57,43 @@ export function ToolCall({
           type="request-suggestions"
           args={args}
           isReadonly={isReadonly}
+        />
+      </div>
+    );
+  }
+
+  // Handle media generation tools with specialized execution and loading UI
+  if (toolName === 'generateImage') {
+    return (
+      <div>
+        <ToolMediaAuthorization 
+          toolInvocation={toolInvocation} 
+          addToolResult={addToolResult}
+          type="image" 
+        />
+      </div>
+    );
+  }
+
+  if (toolName === 'generateVideo') {
+    return (
+      <div>
+        <ToolMediaAuthorization 
+          toolInvocation={toolInvocation} 
+          addToolResult={addToolResult}
+          type="video" 
+        />
+      </div>
+    );
+  }
+
+  if (toolName === 'editImage') {
+    return (
+      <div>
+        <ToolMediaAuthorization 
+          toolInvocation={toolInvocation} 
+          addToolResult={addToolResult}
+          type="image" 
         />
       </div>
     );

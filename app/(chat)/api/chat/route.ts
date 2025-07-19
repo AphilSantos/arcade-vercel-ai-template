@@ -24,13 +24,14 @@ import { updateDocument } from '@/lib/ai/tools/update-document';
 import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { getWeather } from '@/lib/ai/tools/get-weather';
 import { readDocument } from '@/lib/ai/tools/read-document';
+import { generateImageTool, editImageTool, generateVideoTool } from '@/lib/tools/image-tools';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { arcadeServer } from '@/lib/arcade/server';
-import { MAX_TOOLKITS } from '@/lib/arcade/utils';
+import { getMaxToolkitsForPlan } from '@/lib/arcade/utils';
 import { incrementUsage } from '@/middleware/usage-check';
 
-export const maxDuration = 60;
+export const maxDuration = 300; // 5 minutes to accommodate video generation
 
 export async function POST(request: Request) {
   try {
@@ -51,19 +52,19 @@ export async function POST(request: Request) {
     if (!session || !session.user || !session.user.id) {
       return new Response('Unauthorized', { status: 401 });
     }
-    
+
     // Check if the user can start a new conversation based on their subscription plan
     try {
       // Import directly to avoid dynamic import issues
       const { subscriptionService } = require('@/lib/subscription');
-      
+
       // Log the user ID for debugging
       console.log(`Checking if user ${session.user.id} can start a conversation`);
-      
+
       const canStart = await subscriptionService.canStartConversation(session.user.id);
-      
+
       console.log(`User ${session.user.id} can start conversation: ${canStart}`);
-      
+
       if (!canStart) {
         console.log(`User ${session.user.id} has reached their daily conversation limit`);
         return new Response(
@@ -72,7 +73,7 @@ export async function POST(request: Request) {
             code: 'USAGE_LIMIT_EXCEEDED',
             message: 'You have reached your daily conversation limit. Please upgrade to continue chatting.'
           }),
-          { 
+          {
             status: 429,
             headers: { 'Content-Type': 'application/json' }
           }
@@ -90,11 +91,27 @@ export async function POST(request: Request) {
       return new Response('No user message found', { status: 400 });
     }
 
-    if (selectedToolkits.length > MAX_TOOLKITS) {
-      return new Response(
-        `You can only select up to ${MAX_TOOLKITS} toolkits at a time`,
-        { status: 400 },
-      );
+    // Check toolkit limits based on user's subscription plan
+    try {
+      const { subscriptionService } = require('@/lib/subscription');
+      const userPlan = await subscriptionService.getUserPlan(session.user.id);
+      const maxToolkits = getMaxToolkitsForPlan(userPlan);
+
+      if (selectedToolkits.length > maxToolkits) {
+        return new Response(
+          `You can only select up to ${maxToolkits} toolkits at a time. ${userPlan === 'free' ? 'Upgrade to premium for more toolkits!' : ''}`,
+          { status: 400 },
+        );
+      }
+    } catch (error) {
+      console.error('Error checking toolkit limits:', error);
+      // Fallback to free tier limits if there's an error
+      if (selectedToolkits.length > 6) {
+        return new Response(
+          'You can only select up to 6 toolkits at a time',
+          { status: 400 },
+        );
+      }
     }
 
     const chat = await getChatById({ id });
@@ -105,7 +122,7 @@ export async function POST(request: Request) {
       });
 
       await saveChat({ id, userId: session.user.id, title });
-      
+
       // Increment usage counter for new conversations only
       // This ensures we only count new conversations, not continuations of existing ones
       await incrementUsage(session.user.id);
@@ -176,6 +193,10 @@ export async function POST(request: Request) {
               dataStream,
             }),
             readDocument: readDocument({ session, dataStream }),
+            // ImageRouter tools - these will be prioritized over Arcade tools for image generation
+            generateImage: generateImageTool,
+            editImage: editImageTool,
+            generateVideo: generateVideoTool,
           },
           onFinish: async ({ response }) => {
             if (session.user?.id) {
@@ -274,7 +295,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error in chat route', error);
     return new Response('An error occurred while processing your request!', {
-      status: 404,
+      status: 500,
     });
   }
 }

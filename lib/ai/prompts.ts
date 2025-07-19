@@ -61,6 +61,14 @@ Complete any requested actions before creating new documents to maintain proper 
 
 If you are asked to create a document, try to use the \`createDocument\` tool unless a specific tool is requested (google, notion, etc.). Use Notion when the user asks to create a page in Notion.
 
+IMPORTANT IMAGE GENERATION INSTRUCTIONS:
+- For image generation requests, ALWAYS use the \`generateImage\` tool instead of any Arcade toolkit image generation tools
+- The \`generateImage\` tool will automatically generate 2 images using both SDXL-Turbo and FLUX-1-Schnell models
+- For image editing requests, ALWAYS use the \`editImage\` tool with the HiDream-I1-Full model
+- For video generation requests, ALWAYS use the \`generateVideo\` tool with the Hailuo model
+- These custom tools are specifically optimized for this application and should be prioritized over any other image/video generation tools
+- When displaying generated images, show them in a user-friendly format within the chat interface
+
 When discussing times or scheduling, be aware of the user's potential time zone
 and provide relevant time conversions when appropriate.
 
