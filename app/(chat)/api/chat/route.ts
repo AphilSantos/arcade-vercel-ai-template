@@ -30,6 +30,7 @@ import { myProvider } from '@/lib/ai/providers';
 import { arcadeServer } from '@/lib/arcade/server';
 import { getMaxToolkitsForPlan } from '@/lib/arcade/utils';
 import { incrementUsage } from '@/middleware/usage-check';
+import { processMessagesForAI } from '@/lib/utils/attachment-processor';
 
 export const maxDuration = 300; // 5 minutes to accommodate video generation
 
@@ -174,12 +175,21 @@ export async function POST(request: Request) {
         toolkits: selectedToolkits,
       })) ?? {};
 
+    // Process messages to convert blob URLs to base64 data URLs for AI model access
+    console.log('=== PROCESSING MESSAGES FOR AI ===');
+    console.log('Original messages with attachments:', messages.filter(m => m.experimental_attachments?.length > 0).length);
+
+    const processedMessages = await processMessagesForAI(messages);
+
+    console.log('Processed messages with attachments:', processedMessages.filter(m => m.experimental_attachments?.length > 0).length);
+    console.log('=== END PROCESSING ===');
+
     return createDataStreamResponse({
       execute: (dataStream) => {
         const result = streamText({
           model: myProvider.languageModel(selectedChatModel),
           system: systemPrompt({ selectedChatModel }),
-          messages,
+          messages: processedMessages,
           maxSteps: 5,
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,
