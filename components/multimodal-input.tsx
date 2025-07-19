@@ -186,6 +186,68 @@ function PureMultimodalInput({
     [setAttachments],
   );
 
+  const handlePaste = useCallback(
+    async (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
+      const clipboardData = event.clipboardData;
+      const items = Array.from(clipboardData.items);
+      
+      // Filter for image items
+      const imageItems = items.filter(item => item.type.startsWith('image/'));
+      
+      if (imageItems.length === 0) {
+        return; // No images to paste, let default paste behavior handle text
+      }
+      
+      event.preventDefault(); // Prevent default paste for images
+      
+      const imageFiles: File[] = [];
+      
+      // Convert clipboard items to files
+      for (const item of imageItems) {
+        const file = item.getAsFile();
+        if (file) {
+          // Generate a meaningful filename with timestamp
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+          const extension = file.type.split('/')[1] || 'png';
+          const renamedFile = new File([file], `pasted-image-${timestamp}.${extension}`, {
+            type: file.type,
+          });
+          imageFiles.push(renamedFile);
+        }
+      }
+      
+      if (imageFiles.length === 0) {
+        return;
+      }
+      
+      // Show toast notification
+      toast.info(`Pasting ${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''}...`);
+      
+      setUploadQueue(imageFiles.map((file) => file.name));
+
+      try {
+        const uploadPromises = imageFiles.map((file) => uploadFile(file));
+        const uploadedAttachments = await Promise.all(uploadPromises);
+        const successfullyUploadedAttachments = uploadedAttachments.filter(
+          (attachment) => attachment !== undefined,
+        );
+
+        setAttachments((currentAttachments) => [
+          ...currentAttachments,
+          ...successfullyUploadedAttachments,
+        ]);
+        
+        toast.success(`Successfully pasted ${successfullyUploadedAttachments.length} image${successfullyUploadedAttachments.length > 1 ? 's' : ''}`);
+      } catch (error) {
+        console.error('Error uploading pasted images!', error);
+        toast.error('Failed to paste images, please try again!');
+      } finally {
+        setUploadQueue([]);
+      }
+    },
+    [setAttachments],
+  );
+
   const submitForm = useCallback(
     (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
@@ -262,6 +324,7 @@ function PureMultimodalInput({
           placeholder="Send a message..."
           value={input}
           onChange={handleInput}
+          onPaste={handlePaste}
           className={cx(
             'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-muted/40 pb-10 dark:border-zinc-700',
             className,
