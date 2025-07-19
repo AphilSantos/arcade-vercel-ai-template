@@ -217,7 +217,7 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0"
+          className="size-8 p-0"
           onClick={() => setIsAddingList(true)}
         >
           <Plus className="size-4" />
@@ -314,7 +314,7 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
                         className="size-6 p-0 opacity-0 group-hover:opacity-100"
                         onClick={() => deleteTask(list.id, task.id)}
                       >
-                        <Trash2 className="h-3 w-3" />
+                        <Trash2 className="size-3" />
                       </Button>
                     </div>
                   ))}
