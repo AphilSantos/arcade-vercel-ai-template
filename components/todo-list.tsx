@@ -274,7 +274,7 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-8 w-8 p-0 mr-2"
+                  className="size-8 p-0 mr-2"
                   onClick={(e) => {
                     e.stopPropagation();
                     deleteTodoList(list.id);
