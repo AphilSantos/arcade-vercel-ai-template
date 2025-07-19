@@ -52,8 +52,8 @@ export class SubscriptionError extends Error {
     code: SubscriptionErrorCode,
     message: string,
     userMessage: string,
-    statusCode: number = 500,
-    retryable: boolean = false,
+    statusCode = 500,
+    retryable = false,
     context?: Record<string, any>
   ) {
     super(message);
@@ -96,7 +96,7 @@ export const SubscriptionErrors = {
     { userId }
   ),
 
-  usageLimitExceeded: (remaining: number = 0) => new SubscriptionError(
+  usageLimitExceeded: (remaining = 0) => new SubscriptionError(
     SubscriptionErrorCode.USAGE_LIMIT_EXCEEDED,
     'Daily conversation limit exceeded',
     'You have reached your daily conversation limit. Upgrade to Premium for unlimited access.',
@@ -211,8 +211,8 @@ export function handleSubscriptionError(error: unknown, context?: string): Subsc
  */
 export async function withRetry<T>(
   operation: () => Promise<T>,
-  maxRetries: number = 3,
-  delayMs: number = 1000
+  maxRetries = 3,
+  delayMs = 1000
 ): Promise<T> {
   let lastError: SubscriptionError;
   

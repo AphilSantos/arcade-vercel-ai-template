@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { UserPlan } from '@/lib/subscription';
+import type { UserPlan } from '@/lib/subscription';
 
 interface SubscriptionStatusProps {
   plan: UserPlan;
@@ -89,7 +89,7 @@ export function SubscriptionStatus({
                       : 'bg-blue-600'
                 }`}
                 style={{ width: `${(remainingConversations / 20) * 100}%` }}
-              ></div>
+              />
             </div>
             
             {remainingConversations <= 5 && remainingConversations > 0 && (

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { SubscriptionStatus } from './subscription-status';
-import { UserPlan } from '@/lib/subscription';
+import type { UserPlan } from '@/lib/subscription';
 
 /**
  * Example component to demonstrate the SubscriptionStatus component

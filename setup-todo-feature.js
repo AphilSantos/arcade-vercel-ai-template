@@ -5,9 +5,9 @@
  * This script sets up the database, runs tests, and provides next steps
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { execSync } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
 
 async function setupTodoFeature() {
   console.log('🚀 Setting up the complete todo feature...\n');

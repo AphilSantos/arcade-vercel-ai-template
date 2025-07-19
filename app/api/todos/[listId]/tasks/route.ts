@@ -4,7 +4,6 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { eq } from 'drizzle-orm';
 import postgres from 'postgres';
 import { task } from '@/lib/db/schema';
-import type { Task } from '@/lib/db/schema';
 
 // Database connection
 const client = postgres(process.env.POSTGRES_URL || '');

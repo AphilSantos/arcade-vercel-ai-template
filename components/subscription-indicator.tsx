@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Crown, AlertTriangle, Info, AlertCircle } from 'lucide-react';
+import { Loader2, Crown, AlertTriangle, Info, } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import type { UserPlan } from '@/lib/subscription';
@@ -49,7 +48,7 @@ export function SubscriptionIndicator({
   if (isLoading) {
     return (
       <div className={cn('animate-pulse', className)}>
-        <div className="h-6 bg-muted rounded w-24"></div>
+        <div className="h-6 bg-muted rounded w-24" />
       </div>
     );
   }

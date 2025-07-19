@@ -50,7 +50,7 @@ class PayPalServiceImpl implements PayPalService {
         },
         environment: Environment.Production, // Using production environment
       });
-      console.log('PayPal client initialized successfully with client ID:', clientId.substring(0, 5) + '...');
+      console.log('PayPal client initialized successfully with client ID:', `${clientId.substring(0, 5)}...`);
     }
   }
 
@@ -69,7 +69,7 @@ class PayPalServiceImpl implements PayPalService {
       }
 
       // For debugging purposes, log the client credentials
-      console.log('PayPal Client ID:', process.env.PAYPAL_API_KEY?.substring(0, 5) + '...');
+      console.log('PayPal Client ID:', `${process.env.PAYPAL_API_KEY?.substring(0, 5)}...`);
       console.log('PayPal Environment:', process.env.NODE_ENV === 'production' ? 'Production' : 'Sandbox');
 
       try {

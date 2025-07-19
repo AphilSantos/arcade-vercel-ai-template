@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/app/(auth)/auth';
 import { subscriptionService } from '@/lib/subscription';
 import { paypalService } from '@/lib/paypal';
@@ -6,7 +6,6 @@ import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { user } from '@/lib/db/schema';
-import { SubscriptionError } from '@/lib/errors/subscription-errors';
 
 // biome-ignore lint: Forbidden non-null assertion.
 const client = postgres(process.env.POSTGRES_URL!);

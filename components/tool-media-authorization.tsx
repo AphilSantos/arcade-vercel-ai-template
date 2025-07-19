@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import type { ToolInvocation } from 'ai';
 import { MediaGenerationLoading } from './media-generation-loading';
-import { ToolArcadeError } from './tool-arcade-error';
 import { ToolArcadeAuthorization } from './tool-arcade-authorization';
 
 type ToolMediaAuthorizationProps = {

@@ -73,7 +73,7 @@ export function PayPalCheckout({
         return;
       }
       
-      console.log('Loading PayPal SDK with client ID:', clientId.substring(0, 5) + '...');
+      console.log('Loading PayPal SDK with client ID:', `${clientId.substring(0, 5)}...`);
 
       // Remove any existing PayPal scripts to avoid conflicts
       const existingScript = document.getElementById('paypal-script');

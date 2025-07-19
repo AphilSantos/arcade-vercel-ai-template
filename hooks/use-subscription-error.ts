@@ -29,7 +29,7 @@ export function useSubscriptionErrorHandler(options: SubscriptionErrorHandlerOpt
   /**
    * Handle API response errors with consistent error extraction
    */
-  const handleApiError = useCallback(async (response: Response, context: string = 'API request') => {
+  const handleApiError = useCallback(async (response: Response, context = 'API request') => {
     if (response.ok) return null;
     
     try {
@@ -73,7 +73,7 @@ export function useSubscriptionErrorHandler(options: SubscriptionErrorHandlerOpt
   /**
    * Handle general errors in subscription operations
    */
-  const handleError = useCallback((error: unknown, context: string = 'operation') => {
+  const handleError = useCallback((error: unknown, context = 'operation') => {
     const errorMessage = error instanceof Error 
       ? error.message 
       : typeof error === 'string'
@@ -107,7 +107,7 @@ export function useSubscriptionErrorHandler(options: SubscriptionErrorHandlerOpt
    */
   const retryOperation = useCallback(async <T>(
     operation: () => Promise<T>,
-    context: string = 'operation'
+    context = 'operation'
   ): Promise<T | null> => {
     clearError();
     setIsRetrying(true);

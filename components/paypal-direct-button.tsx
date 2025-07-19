@@ -84,13 +84,13 @@ export function PayPalDirectButton({
               label: 'subscribe',
               height: 45
             },
-            createSubscription: function(_data: any, actions: any) {
+            createSubscription: (_data: any, actions: any) => {
               console.log('Creating subscription with plan ID:', planId);
               return actions.subscription.create({
                 plan_id: planId
               });
             },
-            onApprove: async function(data: any) {
+            onApprove: async (data: any) => {
               console.log('Subscription approved with ID:', data.subscriptionID);
               
               // Call our API to confirm the subscription
@@ -121,10 +121,10 @@ export function PayPalDirectButton({
                 console.error('Error confirming subscription:', error);
               }
             },
-            onError: function(err: any) {
+            onError: (err: any) => {
               console.error('PayPal button error:', err);
             }
-          }).render('#' + containerId);
+          }).render(`#${containerId}`);
         } catch (error) {
           console.error('Error rendering PayPal buttons:', error);
         }
@@ -154,7 +154,7 @@ export function PayPalDirectButton({
       return;
     }
     
-    console.log('Loading PayPal SDK with client ID:', clientId.substring(0, 10) + '...');
+    console.log('Loading PayPal SDK with client ID:', `${clientId.substring(0, 10)}...`);
 
     // Create the PayPal SDK script
     const script = document.createElement('script');

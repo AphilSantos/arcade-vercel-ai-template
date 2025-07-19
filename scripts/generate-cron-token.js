@@ -5,7 +5,7 @@
  * Usage: node scripts/generate-cron-token.js
  */
 
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 // Generate a 32-byte random token and convert to hex
 const token = crypto.randomBytes(32).toString('hex');

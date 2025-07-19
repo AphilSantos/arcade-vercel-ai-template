@@ -1,5 +1,5 @@
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { subscriptionService } from '@/lib/subscription';
 import { getToken } from 'next-auth/jwt';
 import { SubscriptionError, SubscriptionErrors } from '@/lib/errors/subscription-errors';

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { Download, Eye, Maximize2 } from 'lucide-react';
+import { Download, Maximize2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 
 interface ImageResultProps {
@@ -75,19 +75,19 @@ export function ImageResult({ result, type }: ImageResultProps) {
             <Badge variant="secondary">{media.length}</Badge>
           </CardTitle>
           <div className="flex gap-1">
-            {models.map((model, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
+            {models.map((model) => (
+              <Badge key={model} variant="outline" className="text-xs">
                 {model.split('/').pop()?.replace(':free', '')}
               </Badge>
             ))}
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">"{result.prompt}"</p>
+        <p className="text-sm text-muted-foreground">&ldquo;{result.prompt}&rdquo;</p>
       </CardHeader>
       <CardContent>
         <div className={`grid gap-4 ${media.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
           {media.map((item, index) => (
-            <div key={index} className="relative group">
+            <div key={`${item.url}-${index}`} className="relative group">
               <div className="relative overflow-hidden rounded-lg border bg-muted">
                 {type === 'image' ? (
                   <Image
@@ -120,7 +120,7 @@ export function ImageResult({ result, type }: ImageResultProps) {
                             variant="secondary"
                             className="bg-white/90 hover:bg-white text-black"
                           >
-                            <Maximize2 className="w-4 h-4" />
+                            <Maximize2 className="size-4" />
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-4xl max-h-[90vh] p-0">
@@ -144,7 +144,7 @@ export function ImageResult({ result, type }: ImageResultProps) {
                       className="bg-white/90 hover:bg-white text-black"
                       onClick={() => downloadMedia(item.url, index)}
                     >
-                      <Download className="w-4 h-4" />
+                      <Download className="size-4" />
                     </Button>
                   </div>
                 </div>

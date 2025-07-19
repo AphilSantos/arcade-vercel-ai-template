@@ -1,6 +1,5 @@
 import { customProvider } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { isProductionEnvironment } from '../constants';
 
 // Use OpenAI models for all environments
 export const myProvider = customProvider({

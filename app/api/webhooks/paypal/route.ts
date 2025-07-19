@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { paypalService } from '@/lib/paypal';
 import { subscriptionService } from '@/lib/subscription';
 import { eq } from 'drizzle-orm';

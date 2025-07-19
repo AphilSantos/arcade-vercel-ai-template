@@ -8,7 +8,7 @@
 const fetch = require('node-fetch');
 
 const BASE_URL = 'http://localhost:3000';
-let authToken = null;
+const authToken = null;
 let testListId = null;
 let testTaskId = null;
 
