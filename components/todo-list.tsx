@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import type { User } from 'next-auth';
-import { 
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -38,11 +38,11 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
   // Fetch todo lists
   useEffect(() => {
     if (!user) return;
-    
+
     const fetchTodoLists = async () => {
       try {
         const response = await fetch('/api/todos', {
-          credentials: 'include'
+          credentials: 'include',
         });
         if (!response.ok) throw new Error('Failed to fetch todo lists');
         const data = await response.json();
@@ -63,17 +63,17 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
 
   const createTodoList = async () => {
     if (!newListTitle.trim() || !user) return;
-    
+
     try {
       const response = await fetch('/api/todos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: newListTitle }),
-        credentials: 'include'
+        credentials: 'include',
       });
-      
+
       if (!response.ok) throw new Error('Failed to create todo list');
-      
+
       const newList = await response.json();
       setTodoLists([...todoLists, newList]);
       setActiveListId(newList.id);
@@ -88,25 +88,27 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
 
   const createTask = async () => {
     if (!newTaskTitle.trim() || !activeListId || !user) return;
-    
+
     try {
       const response = await fetch(`/api/todos/${activeListId}/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: newTaskTitle }),
-        credentials: 'include'
+        credentials: 'include',
       });
-      
+
       if (!response.ok) throw new Error('Failed to create task');
-      
+
       const newTask = await response.json();
-      
-      setTodoLists(todoLists.map(list =>
-        list.id === activeListId
-          ? { ...list, tasks: [...list.tasks, newTask] }
-          : list
-      ));
-      
+
+      setTodoLists(
+        todoLists.map((list) =>
+          list.id === activeListId
+            ? { ...list, tasks: [...list.tasks, newTask] }
+            : list,
+        ),
+      );
+
       setNewTaskTitle('');
       setIsAddingTask(false);
       toast.success('Task added');
@@ -116,29 +118,35 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
     }
   };
 
-  const toggleTaskCompletion = async (listId: string, taskId: string, completed: boolean) => {
+  const toggleTaskCompletion = async (
+    listId: string,
+    taskId: string,
+    completed: boolean,
+  ) => {
     try {
       const response = await fetch(`/api/todos/${listId}/tasks/${taskId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ completed: !completed }),
-        credentials: 'include'
+        credentials: 'include',
       });
-      
+
       if (!response.ok) throw new Error('Failed to update task');
-      
-      setTodoLists(todoLists.map(list =>
-        list.id === listId
-          ? {
-              ...list,
-              tasks: list.tasks.map(task =>
-                task.id === taskId
-                  ? { ...task, completed: !completed }
-                  : task
-              )
-            }
-          : list
-      ));
+
+      setTodoLists(
+        todoLists.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                tasks: list.tasks.map((task) =>
+                  task.id === taskId
+                    ? { ...task, completed: !completed }
+                    : task,
+                ),
+              }
+            : list,
+        ),
+      );
     } catch (error) {
       console.error('Error updating task:', error);
       toast.error('Failed to update task');
@@ -149,17 +157,22 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
     try {
       const response = await fetch(`/api/todos/${listId}/tasks/${taskId}`, {
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
       });
-      
+
       if (!response.ok) throw new Error('Failed to delete task');
-      
-      setTodoLists(todoLists.map(list =>
-        list.id === listId
-          ? { ...list, tasks: list.tasks.filter(task => task.id !== taskId) }
-          : list
-      ));
-      
+
+      setTodoLists(
+        todoLists.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                tasks: list.tasks.filter((task) => task.id !== taskId),
+              }
+            : list,
+        ),
+      );
+
       toast.success('Task deleted');
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -171,17 +184,17 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
     try {
       const response = await fetch(`/api/todos/${listId}`, {
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
       });
-      
+
       if (!response.ok) throw new Error('Failed to delete todo list');
-      
-      setTodoLists(todoLists.filter(list => list.id !== listId));
-      
+
+      setTodoLists(todoLists.filter((list) => list.id !== listId));
+
       if (activeListId === listId) {
         setActiveListId(todoLists.length > 1 ? todoLists[0].id : null);
       }
-      
+
       toast.success('Todo list deleted');
     } catch (error) {
       console.error('Error deleting todo list:', error);
@@ -198,7 +211,7 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
   }
 
   return (
-    <div className="w-full h-full p-4">
+    <div className="size-full p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Todo Lists</h2>
         <Button
@@ -207,7 +220,7 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
           className="h-8 w-8 p-0"
           onClick={() => setIsAddingList(true)}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="size-4" />
         </Button>
       </div>
 
@@ -267,7 +280,7 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
                     deleteTodoList(list.id);
                   }}
                 >
-                  <Trash2 className="h-3 w-3" />
+                  <Trash2 className="size-3" />
                 </Button>
               </div>
               <AccordionContent className="pt-1 pb-2">
@@ -280,24 +293,32 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
                       <div className="flex items-center gap-2">
                         <Checkbox
                           checked={task.completed}
-                          onCheckedChange={() => toggleTaskCompletion(list.id, task.id, task.completed)}
-                          className="h-4 w-4"
+                          onCheckedChange={() =>
+                            toggleTaskCompletion(
+                              list.id,
+                              task.id,
+                              task.completed,
+                            )
+                          }
+                          className="size-4"
                         />
-                        <span className={`text-sm ${task.completed ? 'line-through text-muted-foreground' : ''}`}>
+                        <span
+                          className={`text-sm ${task.completed ? 'line-through text-muted-foreground' : ''}`}
+                        >
                           {task.title}
                         </span>
                       </div>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100"
+                        className="size-6 p-0 opacity-0 group-hover:opacity-100"
                         onClick={() => deleteTask(list.id, task.id)}
                       >
                         <Trash2 className="h-3 w-3" />
                       </Button>
                     </div>
                   ))}
-                  
+
                   {isAddingTask && activeListId === list.id ? (
                     <div className="flex items-center gap-1 px-4 py-1">
                       <Input
@@ -314,24 +335,24 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
                         }}
                         autoFocus
                       />
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-7 w-7 p-0" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="size-7 p-0"
                         onClick={createTask}
                       >
-                        <Check className="h-3 w-3" />
+                        <Check className="size-3" />
                       </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-7 w-7 p-0" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="size-7 p-0"
                         onClick={() => {
                           setIsAddingTask(false);
                           setNewTaskTitle('');
                         }}
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     </div>
                   ) : (
@@ -344,7 +365,7 @@ export function TodoListSidebar({ user }: { user: User | undefined }) {
                         setIsAddingTask(true);
                       }}
                     >
-                      <Plus className="h-3 w-3 mr-1" /> Add task
+                      <Plus className="size-3 mr-1" /> Add task
                     </Button>
                   )}
                 </div>
