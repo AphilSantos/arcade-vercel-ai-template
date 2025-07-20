@@ -3,6 +3,9 @@ import { auth } from '@/app/(auth)/auth';
 import { arcadeServer } from '@/lib/arcade/server';
 import { formatOpenAIToolNameToArcadeToolName } from '@/lib/arcade/utils';
 
+// Increase timeout for tool authorization
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   try {
     const session = await auth();
