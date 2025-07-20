@@ -20,7 +20,12 @@ import { Badge } from './ui/badge';
 import { toast } from 'sonner';
 import { MAX_TOOLKITS_FREE } from '@/lib/arcade/utils';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => {
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+  }
+  return res.json();
+});
 
 export const DEFAULT_TOOLKITS = [
   'github',
@@ -39,16 +44,31 @@ export function ToolkitSelector() {
   );
   const [open, setOpen] = React.useState(false);
 
-  const { data: toolkitIds, isLoading } = useSWR<string[]>(
+  const { data: toolkitIds, isLoading, error: toolkitsError } = useSWR<string[]>(
     '/api/toolkits',
     fetcher,
+    {
+      onError: (error) => {
+        // Don't show error toast for 401 (unauthorized) - user might be signed out
+        if (!error.message.includes('401')) {
+          console.error('Failed to load toolkits:', error);
+        }
+      }
+    }
   );
 
-  const { data: limitsData, isLoading: limitsLoading } = useSWR<{
+  const { data: limitsData, isLoading: limitsLoading, error: limitsError } = useSWR<{
     plan: 'free' | 'paid';
     maxToolkits: number;
     isPremium: boolean;
-  }>('/api/toolkits/limits', fetcher);
+  }>('/api/toolkits/limits', fetcher, {
+    onError: (error) => {
+      // Don't show error toast for 401 (unauthorized) - user might be signed out
+      if (!error.message.includes('401')) {
+        console.error('Failed to load toolkit limits:', error);
+      }
+    }
+  });
 
   const maxToolkits = limitsData?.maxToolkits || MAX_TOOLKITS_FREE;
   const isPremium = limitsData?.isPremium || false;
@@ -71,19 +91,23 @@ export function ToolkitSelector() {
     selectedToolkits,
   ]);
 
-  const toolkits =
-    toolkitIds?.map((id) => {
-      const provider = getAuthProviderByToolkitId(id.toLowerCase());
-      return {
-        id,
-        name: provider?.name || id,
-        icon: provider?.icon ? (
-          <provider.icon className="size-4" />
-        ) : (
-          <Wrench className="size-4" />
-        ),
-      };
-    }) || [];
+  // Check if user is authenticated (no 401 errors)
+  const isAuthenticated = !toolkitsError?.message.includes('401') && !limitsError?.message.includes('401');
+  
+  const toolkits = (toolkitIds && Array.isArray(toolkitIds)) 
+    ? toolkitIds.map((id) => {
+        const provider = getAuthProviderByToolkitId(id.toLowerCase());
+        return {
+          id,
+          name: provider?.name || id,
+          icon: provider?.icon ? (
+            <provider.icon className="size-4" />
+          ) : (
+            <Wrench className="size-4" />
+          ),
+        };
+      })
+    : [];
 
   const handleToolkitChange = (toolkitId: string) => {
     if (selectedToolkits.includes(toolkitId)) {
@@ -157,6 +181,10 @@ export function ToolkitSelector() {
               {isLoading || limitsLoading ? (
                 <div className="text-sm text-muted-foreground p-2">
                   Loading toolkits...
+                </div>
+              ) : !isAuthenticated ? (
+                <div className="text-sm text-muted-foreground p-2">
+                  Please sign in to access toolkits.
                 </div>
               ) : (
                 <>

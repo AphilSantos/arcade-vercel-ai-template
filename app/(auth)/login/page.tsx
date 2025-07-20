@@ -36,7 +36,8 @@ export default function Page() {
       });
     } else if (state.status === 'success') {
       setIsSuccessful(true);
-      router.refresh();
+      // Redirect to main app page after successful login
+      router.push('/');
     }
   }, [state.status, router]);
 
