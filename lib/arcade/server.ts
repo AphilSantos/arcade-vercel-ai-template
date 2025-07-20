@@ -32,7 +32,6 @@ class ArcadeServer {
       console.error('ARCADE_API_KEY is not set in environment variables');
       throw new Error('ARCADE_API_KEY is not set');
     }
-
     this.client = new Arcade({
       apiKey,
       baseURL: process.env.ARCADE_BASE_URL,
@@ -56,13 +55,13 @@ class ArcadeServer {
     userId: string;
   }): Promise<ExecuteToolResult> {
     const formattedToolName = formatOpenAIToolNameToArcadeToolName(toolName);
+    const tool = await this.client.tools.get(formattedToolName);
+
+    if (!tool) {
+      return { error: 'Tool not found' };
+    }
 
     try {
-      const tool = await this.client.tools.get(formattedToolName);
-      if (!tool) {
-        return { error: 'Tool not found' };
-      }
-
       const result = await this.client.tools.execute({
         tool_name: formattedToolName,
         input: args,
@@ -72,32 +71,14 @@ class ArcadeServer {
       return { result };
     } catch (error) {
       if (error instanceof PermissionDeniedError) {
-        try {
-          console.log(`[Auth] Starting authorization for ${formattedToolName}`);
-          const authInfo = await this.client.tools.authorize({
-            tool_name: formattedToolName,
-            user_id: userId,
-          });
-          console.log(`[Auth] Authorization response:`, authInfo);
-          return { authResponse: authInfo };
-        } catch (authError) {
-          console.error(`[Auth] Authorization failed for ${formattedToolName}:`, authError);
-          return { error: `Authorization failed: ${authError instanceof Error ? authError.message : 'Unknown error'}` };
-        }
+        const authInfo = await this.client.tools.authorize({
+          tool_name: formattedToolName,
+          user_id: userId,
+        });
+
+        return { authResponse: authInfo };
       } else {
-        console.error(`[Tool] Error executing ${formattedToolName}:`, error);
-
-        // Handle specific error types for better debugging
-        if (error instanceof Error) {
-          if (error.message.includes('timeout')) {
-            return { error: 'Tool execution timed out. Please try again.' };
-          }
-          if (error.message.includes('network') || error.message.includes('fetch')) {
-            return { error: 'Network error occurred. Please check your connection and try again.' };
-          }
-          return { error: `Tool execution failed: ${error.message}` };
-        }
-
+        console.error('Error executing tool', error);
         return { error: 'Failed to execute tool' };
       }
     }
