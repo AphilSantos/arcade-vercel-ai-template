@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/app/(auth)/auth';
-import { arcadeServer } from '@/lib/arcade/server';
+import { arcadeServer, type ExecuteToolResult } from '@/lib/arcade/server';
 
 // Increase timeout for tool execution (60 seconds for Pro plan, 10 seconds for Hobby)
 export const maxDuration = 60;
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     console.log(`[ToolExecution] Executing tool ${toolName}...`);
 
     // Add timeout wrapper for the tool execution
-    const timeoutPromise = new Promise((_, reject) => {
+    const timeoutPromise = new Promise<ExecuteToolResult>((_, reject) => {
       setTimeout(() => reject(new Error('Tool execution timeout')), 55000); // 55 seconds
     });
 
