@@ -56,18 +56,12 @@ export async function POST(request: Request) {
 
     console.log(`[ToolExecution] Executing tool ${toolName}...`);
 
-    // Add timeout wrapper for the tool execution
-    const timeoutPromise = new Promise<ExecuteToolResult>((_, reject) => {
-      setTimeout(() => reject(new Error('Tool execution timeout')), 55000); // 55 seconds
-    });
-
-    const executionPromise = arcadeServer.executeTool({
+    // Execute tool directly - let Vercel's maxDuration handle timeouts
+    const result = await arcadeServer.executeTool({
       toolName,
       args,
       userId: session.user.id,
     });
-
-    const result = await Promise.race([executionPromise, timeoutPromise]);
 
     const executionTime = Date.now() - startTime;
     console.log(`[ToolExecution] Tool ${toolName} completed in ${executionTime}ms`);

@@ -32,6 +32,7 @@ class ArcadeServer {
       console.error('ARCADE_API_KEY is not set in environment variables');
       throw new Error('ARCADE_API_KEY is not set');
     }
+
     this.client = new Arcade({
       apiKey,
       baseURL: process.env.ARCADE_BASE_URL,
@@ -55,13 +56,13 @@ class ArcadeServer {
     userId: string;
   }): Promise<ExecuteToolResult> {
     const formattedToolName = formatOpenAIToolNameToArcadeToolName(toolName);
-    const tool = await this.client.tools.get(formattedToolName);
-
-    if (!tool) {
-      return { error: 'Tool not found' };
-    }
 
     try {
+      const tool = await this.client.tools.get(formattedToolName);
+      if (!tool) {
+        return { error: 'Tool not found' };
+      }
+
       const result = await this.client.tools.execute({
         tool_name: formattedToolName,
         input: args,
@@ -71,14 +72,32 @@ class ArcadeServer {
       return { result };
     } catch (error) {
       if (error instanceof PermissionDeniedError) {
-        const authInfo = await this.client.tools.authorize({
-          tool_name: formattedToolName,
-          user_id: userId,
-        });
-
-        return { authResponse: authInfo };
+        try {
+          console.log(`[Auth] Starting authorization for ${formattedToolName}`);
+          const authInfo = await this.client.tools.authorize({
+            tool_name: formattedToolName,
+            user_id: userId,
+          });
+          console.log(`[Auth] Authorization response:`, authInfo);
+          return { authResponse: authInfo };
+        } catch (authError) {
+          console.error(`[Auth] Authorization failed for ${formattedToolName}:`, authError);
+          return { error: `Authorization failed: ${authError instanceof Error ? authError.message : 'Unknown error'}` };
+        }
       } else {
-        console.error('Error executing tool', error);
+        console.error(`[Tool] Error executing ${formattedToolName}:`, error);
+
+        // Handle specific error types for better debugging
+        if (error instanceof Error) {
+          if (error.message.includes('timeout')) {
+            return { error: 'Tool execution timed out. Please try again.' };
+          }
+          if (error.message.includes('network') || error.message.includes('fetch')) {
+            return { error: 'Network error occurred. Please check your connection and try again.' };
+          }
+          return { error: `Tool execution failed: ${error.message}` };
+        }
+
         return { error: 'Failed to execute tool' };
       }
     }
@@ -126,12 +145,12 @@ class ArcadeServer {
             execute: needsAuth
               ? undefined
               : async (input: any) => {
-                  return await this.client.tools.execute({
-                    tool_name: name,
-                    input,
-                    user_id: userId,
-                  });
-                },
+                return await this.client.tools.execute({
+                  tool_name: name,
+                  input,
+                  user_id: userId,
+                });
+              },
           };
         }
       });
@@ -158,7 +177,7 @@ class ArcadeServer {
       }
 
       console.log(`Found ${tools.items.length} tools`);
-      
+
       const toolkitSet = new Set<string>();
       for (const tool of tools.items) {
         if (tool?.toolkit?.name) {
@@ -168,7 +187,7 @@ class ArcadeServer {
           console.log('Tool missing toolkit.name:', JSON.stringify(tool, null, 2));
         }
       }
-      
+
       const result = Array.from(toolkitSet);
       console.log(`Returning ${result.length} unique toolkits:`, result);
       return result;
