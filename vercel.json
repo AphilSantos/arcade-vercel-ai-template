@@ -3,19 +3,5 @@
     "outputDirectory": ".next",
     "devCommand": "pnpm run dev",
     "installCommand": "pnpm install",
-    "framework": "nextjs",
-    "functions": {
-        "app/(chat)/api/tools/route.ts": {
-            "maxDuration": 60
-        },
-        "app/(chat)/api/tools/auth/route.ts": {
-            "maxDuration": 60
-        },
-        "app/(chat)/api/tools/auth/waitForCompletion/route.ts": {
-            "maxDuration": 120
-        },
-        "app/(chat)/api/chat/route.ts": {
-            "maxDuration": 300
-        }
-    }
+    "framework": "nextjs"
 }
