@@ -1,31 +1,3 @@
-<div align="center">
-<p align="center">
-  <a href="https://arcade.dev/">
-    <h1 align="center">Arcade Chatbot</h1>
-  </a>
-</p>
-<img width="700" height="500" alt="Screenshot 2025-04-05 at 1 58 21 PM" src="https://github.com/user-attachments/assets/b6251cab-d17a-40a6-b052-b4c989340ca6" />
-</div>
-
-<p align="center">
-  A chatbot interface for Arcade tools, built with Next.js and the Arcade SDK.
-  Based on the <a href="https://github.com/vercel/ai-chatbot">Vercel AI Chatbot</a> template.
-</p>
-
-<p align="center">
-  <strong>
-    Try out our hosted version of this project at <a href="https://chat.arcade.dev">chat.arcade.dev</a>
-  </strong>
-</p>
-
-<p align="center">
-  <a href="#features">Features</a> •
-  <a href="#prerequisites">Prerequisites</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#configuration">Configuration</a> •
-  <a href="#development">Development</a> •
-  <a href="#deployment">Deployment</a>
-</p>
 
 ## Features
 
